@@ -1,0 +1,545 @@
+# Held-out evaluation set for the compliance-training assistant.
+#
+# Fields
+#   id, type, question
+#   gold:        relevant passages as [doc_id, anchor]. A retrieved chunk is relevant if it belongs to
+#                doc_id and covers an anchor equal to, or nested under, the gold anchor
+#                ("(l)(4)" covers "(l)(4)(iii)"; "7" covers "7.2"). An empty anchor means "any part".
+#                Relevance is defined on document structure, not chunk ids, so every chunking
+#                strategy is scored against the same ground truth.
+#   key_facts:   regexes that a correct answer must all match (case-insensitive). They check the
+#                facts that matter (numbers, course codes, the law-vs-policy distinction), not wording.
+#   expect:      expected status: answered | needs_clarification | insufficient_context | out_of_scope
+#
+# Question types
+#   policy_fact    single internal-document lookup
+#   reg_fact       single regulation lookup
+#   law_vs_policy  must separate the legal requirement from the stricter internal rule
+#   multi_doc      needs two or more documents (role -> curriculum -> course -> interval)
+#   identifier     exact course code / citation lookups, where keyword search should matter
+#   version        superseded policy / change history
+#   conflict       an informal source contradicts policy; the answer must follow policy
+#   ambiguous      underspecified; should ask for clarification
+#   insufficient   in-domain, but the corpus does not contain the answer
+#   out_of_scope   not about compliance training
+#
+# Authoring note: questions were written from facts.yaml and the regulation text *before* running
+# any experiment on them. The dev/test split is assigned by eval/split.py (seeded, stratified by type).
+
+- id: q01
+  type: reg_fact
+  question: How often does OSHA require a forklift operator's performance to be evaluated?
+  gold: [[29-CFR-1910.178, "(l)(4)"]]
+  key_facts: ['three years|3 years|36 months']
+  expect: answered
+
+- id: q02
+  type: policy_fact
+  question: How many days does a new hire have to complete required non-safety-critical training?
+  gold: [[POL-CT-001-v3.2, "6.1"]]
+  key_facts: ['\b30\b']
+  expect: answered
+
+- id: q03
+  type: law_vs_policy
+  question: Is the annual HIPAA refresher a legal requirement or a Northwind rule?
+  gold: [[POL-CT-001-v3.2, "7.2"], [45-CFR-164.530, "(b)"]]
+  key_facts: ['northwind|policy|internal', 'no fixed|not set|does not (set|specify|require)|not (legally )?required|no (specific|set) (refresher )?interval']
+  expect: answered
+
+- id: q04
+  type: policy_fact
+  question: What is the grace period for an overdue annual course that is not safety-critical?
+  gold: [[POL-CT-001-v3.2, "8.1"]]
+  key_facts: ['\b15\b']
+  expect: answered
+
+- id: q05
+  type: policy_fact
+  question: Is there a grace period for overdue safety-critical training?
+  gold: [[POL-CT-001-v3.2, "8.2"], [SOP-LMS-021, "3.1"]]
+  key_facts: ['no grace|not (have|get) a grace|none']
+  expect: answered
+
+- id: q06
+  type: reg_fact
+  question: How long must bloodborne pathogens training records be kept under OSHA?
+  gold: [[29-CFR-1910.1030, "(h)(2)(ii)"]]
+  key_facts: ['three years|3 years']
+  expect: answered
+
+- id: q07
+  type: reg_fact
+  question: How often must employees in a hearing conservation program be retrained under the OSHA noise standard?
+  gold: [[29-CFR-1910.95, "(k)(2)"]]
+  key_facts: ['annual|every year|each year|12 months']
+  expect: answered
+
+- id: q08
+  type: reg_fact
+  question: When does the OSHA respiratory protection standard require respirator retraining?
+  gold: [[29-CFR-1910.134, "(k)(5)"]]
+  key_facts: ['annual|every year|12 months']
+  expect: answered
+
+- id: q09
+  type: reg_fact
+  question: How often must a tight-fitting respirator user be fit tested?
+  gold: [[29-CFR-1910.134, "(f)(2)"], [SOP-EHS-012, "3.1"]]
+  key_facts: ['annual|every year|12 months']
+  expect: answered
+
+- id: q10
+  type: reg_fact
+  question: What events require lockout/tagout retraining of authorized and affected employees?
+  gold: [[29-CFR-1910.147, "(c)(7)(iii)"]]
+  key_facts: ['job assignment', 'machine|equipment|process', 'inspection|deviation|inadequac']
+  expect: answered
+
+- id: q11
+  type: reg_fact
+  question: How often must the energy control procedure be periodically inspected?
+  gold: [[29-CFR-1910.147, "(c)(6)"]]
+  key_facts: ['annual|once a year|every year|12 months']
+  expect: answered
+
+- id: q12
+  type: reg_fact
+  question: Under California law, how many hours of harassment prevention training do supervisors need?
+  gold: [[CA-GOV-12950.1, "(a)(1)"]]
+  key_facts: ['two hours|2 hours|2-hour|two-hour']
+  expect: answered
+
+- id: q13
+  type: reg_fact
+  question: How quickly must a seasonal or temporary employee in California receive harassment prevention training?
+  gold: [[CA-GOV-12950.1, "(f)"], [FAQ-HR-HAR, "Q8"]]
+  key_facts: ['\b30\b', '\b100 hours']
+  expect: answered
+
+- id: q14
+  type: reg_fact
+  question: Which topics must California harassment prevention training include besides sexual harassment?
+  gold: [[CA-GOV-12950.1, "(a)(2)"], [CA-GOV-12950.1, "(a)(3)"], [FAQ-HR-HAR, "Q6"]]
+  key_facts: ['abusive conduct', 'gender identity|gender expression|sexual orientation']
+  expect: answered
+
+- id: q15
+  type: reg_fact
+  question: Must bloodborne pathogens training include a chance to ask the trainer questions?
+  gold: [[29-CFR-1910.1030, "(g)(2)(vii)"], [CAT-2026, "EHS-BBP-100"]]
+  key_facts: ['yes|must|required|interactive']
+  expect: answered
+
+- id: q16
+  type: reg_fact
+  question: What must a forklift operator certification record contain?
+  gold: [[29-CFR-1910.178, "(l)(6)"], [SOP-EHS-007, "5.1"], [POL-CT-001-v3.2, "10.3"]]
+  key_facts: ['name', 'training', 'evaluation', 'identity|trainer|evaluator|person']
+  expect: answered
+
+- id: q17
+  type: reg_fact
+  question: What events trigger forklift refresher training outside the normal cycle?
+  gold: [[29-CFR-1910.178, "(l)(4)(ii)"], [SOP-EHS-007, "4.2"]]
+  key_facts: ['unsafe', 'accident|near.?miss', 'different (type of )?truck']
+  expect: answered
+
+- id: q18
+  type: reg_fact
+  question: When must hazard communication training be provided under OSHA?
+  gold: [[29-CFR-1910.1200, "(h)(1)"]]
+  key_facts: ['initial assignment', 'new (chemical )?hazard']
+  expect: answered
+
+- id: q19
+  type: reg_fact
+  question: How long must HIPAA documentation, including training records, be retained?
+  gold: [[45-CFR-164.530, "(j)(2)"], [POL-CT-001-v3.2, "10.2"]]
+  key_facts: ['six years|6 years']
+  expect: answered
+
+- id: q20
+  type: reg_fact
+  question: How often does OSHA require portable fire extinguisher education for employees expected to use them?
+  gold: [[29-CFR-1910.157, "(g)(2)"]]
+  key_facts: ['annual|every year|12 months', 'initial employment|at hire|upon hire']
+  expect: answered
+
+- id: q21
+  type: law_vs_policy
+  question: How often must forklift operators be re-evaluated at Northwind, and how does that compare with OSHA?
+  gold: [[SOP-EHS-007, "4.1"], [29-CFR-1910.178, "(l)(4)"], [POL-CT-001-v3.2, "7"]]
+  key_facts: ['36 months|three years|3 years']
+  expect: answered
+
+- id: q22
+  type: law_vs_policy
+  question: California requires harassment training every two years for California employees. Who does Northwind require it for?
+  gold: [[POL-CT-001-v3.2, "7.3"], [FAQ-HR-HAR, "Q1"]]
+  key_facts: ['all (u\.?s\.?|united states) employees|every u\.?s\.? employee']
+  expect: answered
+
+- id: q23
+  type: law_vs_policy
+  question: A new supervisor was promoted in California. By when must they complete supervisor harassment training under Northwind rules versus state law?
+  gold: [[FAQ-HR-HAR, "Q3"], [POL-CT-001-v3.2, "6.4"], [CA-GOV-12950.1, "(a)(1)"]]
+  key_facts: ['\b30\b', 'six months|6 months']
+  expect: answered
+
+- id: q24
+  type: law_vs_policy
+  question: Does the law require Northwind's 3-year hazard communication refresher?
+  gold: [[29-CFR-1910.1200, "(h)(1)"], [POL-CT-001-v3.2, "7"]]
+  key_facts: ['no|not|does not', 'initial assignment|new (chemical )?hazard']
+  expect: answered
+
+- id: q25
+  type: law_vs_policy
+  question: How often do authorized employees retake lockout/tagout training at Northwind, and is there a fixed legal interval?
+  gold: [[POL-CT-001-v3.2, "7"], [CAT-2026, "EHS-LOTO-150"], [29-CFR-1910.147, "(c)(7)(iii)"]]
+  key_facts: ['24 months|two years|2 years']
+  expect: answered
+
+- id: q26
+  type: law_vs_policy
+  question: How long does Northwind keep training records in general, and what longer periods apply by regulation?
+  gold: [[POL-CT-001-v3.2, "10.1"], [POL-CT-001-v3.2, "10.2"]]
+  key_facts: ['five years|5 years', 'six years|6 years']
+  expect: answered
+
+- id: q27
+  type: multi_doc
+  question: Which courses must a Clinic Nurse complete, and which of them recur every 12 months?
+  gold: [[MAT-ROLE-2026, "CLN-RN"], [CAT-2026, "course-summary"]]
+  key_facts: ['EHS-BBP-100', 'PRV-HIP-110', 'PRV-HIP-120', 'EHS-RSP-110']
+  expect: answered
+
+- id: q28
+  type: multi_doc
+  question: What does a warehouse forklift operator need before being issued a forklift badge?
+  gold: [[SOP-EHS-007, "2"], [MAT-ROLE-2026, "WH-OP-FL"]]
+  key_facts: ['EHS-FL-101', 'EHS-FL-201']
+  expect: answered
+
+- id: q29
+  type: multi_doc
+  question: Why do Telehealth Coordinators have no HIPAA training assigned, and what was done about it?
+  gold: [[AUD-2026-Q2, "F-3"], [SOP-LMS-014, "5.2"], [MAT-ROLE-2026, "CLN-TEL"]]
+  key_facts: ['CLN-TEL|telehealth', 'curriculum|change request|matrix', '2026-07-10|dynamic group|corrected|PRV-HIP']
+  expect: answered
+
+- id: q30
+  type: multi_doc
+  question: What happens on the due date if a forklift operator's training is not complete?
+  gold: [[SOP-LMS-021, "3.1"], [POL-CT-001-v3.2, "8.2"]]
+  key_facts: ['badge', 'suspend|deactivat']
+  expect: answered
+
+- id: q31
+  type: multi_doc
+  question: Why were 11 Fresno forklift operators still driving with expired evaluations?
+  gold: [[AUD-2026-Q2, "F-2"]]
+  key_facts: ['integration|badge.suspension', 'access control|upgrade|failed']
+  expect: answered
+
+- id: q32
+  type: multi_doc
+  question: What was the bloodborne pathogens completion rate at the Fresno clinic in Q2 2026, and why was it low?
+  gold: [[AUD-2026-Q2, "F-1"]]
+  key_facts: ['86', 'agency|per-diem|HRIS']
+  expect: answered
+
+- id: q33
+  type: multi_doc
+  question: What LMS changes were released to address the Q2 2026 audit findings?
+  gold: [[RN-LMS-2026-08, "new"]]
+  key_facts: ['reconciliation', 'agency', 'job code']
+  expect: answered
+
+- id: q34
+  type: multi_doc
+  question: A clinic nurse's BBP refresher is overdue. What must the clinic manager do?
+  gold: [[SOP-LMS-021, "3.2"]]
+  key_facts: ['reassign|without occupational exposure|no exposure']
+  expect: answered
+
+- id: q35
+  type: multi_doc
+  question: Can a new hire's harassment training certificate from a previous California employer be accepted?
+  gold: [[SOP-LMS-030, "4.1"], [FAQ-HR-HAR, "Q5"], [CA-GOV-12950.1, "(m)"]]
+  key_facts: ['equivalen|accepted|submit', 'two years|2 years']
+  expect: answered
+
+- id: q36
+  type: multi_doc
+  question: Which required courses can never be satisfied by external training?
+  gold: [[SOP-LMS-030, "3"], [POL-CT-001-v3.2, "9.2"]]
+  key_facts: ['EHS-EAP-100|emergency action', 'EHS-FL-201|forklift practical', 'PRV-HIP-110|HIPAA privacy']
+  expect: answered
+
+- id: q37
+  type: multi_doc
+  question: What is the escalation sequence when required training becomes overdue?
+  gold: [[SOP-LMS-021, "2"]]
+  key_facts: ['manager', 'HR business partner|HRBP', 'site leader', 'compliance office']
+  expect: answered
+
+- id: q38
+  type: multi_doc
+  question: What must happen before a maintenance technician is fit tested for a respirator?
+  gold: [[SOP-EHS-012, "2.1"], [29-CFR-1910.134, "(e)(1)"]]
+  key_facts: ['medical (evaluation|questionnaire|clearance)']
+  expect: answered
+
+- id: q39
+  type: multi_doc
+  question: When is the next assignment due if an employee completes a recurring course early?
+  gold: [[POL-CT-001-v3.2, "7.4"], [SOP-LMS-014, "3.1"], [POL-CT-001-v3.2, "3.3"]]
+  key_facts: ['completion date']
+  expect: answered
+
+- id: q40
+  type: multi_doc
+  question: How are due dates handled for an employee on a long leave of absence?
+  gold: [[SOP-LMS-021, "4.1"]]
+  key_facts: ['pause', '14 days|\b14\b', '30 days|\b30\b']
+  expect: answered
+
+- id: q41
+  type: identifier
+  question: What is EHS-FL-210 and how often is it assigned?
+  gold: [[CAT-2026, "EHS-FL-210"]]
+  key_facts: ['refresher', '12 months|annual']
+  expect: answered
+
+- id: q42
+  type: identifier
+  question: What does 29 CFR 1910.178(l)(4)(iii) require?
+  gold: [[29-CFR-1910.178, "(l)(4)"]]
+  key_facts: ['three years|3 years|evaluation']
+  expect: answered
+
+- id: q43
+  type: identifier
+  question: What replaced the retired course HR-HAR-090 and why?
+  gold: [[CAT-2026, "retired-courses"]]
+  key_facts: ['HR-HAR-100', 'interactive|1-hour|one hour']
+  expect: answered
+
+- id: q44
+  type: identifier
+  question: What does 45 CFR 164.308(a)(5) require?
+  gold: [[45-CFR-164.308, "(a)(5)"]]
+  key_facts: ['security awareness']
+  expect: answered
+
+- id: q45
+  type: identifier
+  question: Which roles are assigned EHS-CS-300, and when?
+  gold: [[CAT-2026, "EHS-CS-300"], [MAT-ROLE-2026, "MFG-MT"]]
+  key_facts: ['MFG-MT|maintenance technician', 'roster|entrant|attendant']
+  expect: answered
+
+- id: q46
+  type: identifier
+  question: How long is HR-HAR-200 and can it be taken in segments?
+  gold: [[CAT-2026, "HR-HAR-200"], [FAQ-HR-HAR, "Q4"]]
+  key_facts: ['120|two hours|2 hours', 'segment']
+  expect: answered
+
+- id: q47
+  type: identifier
+  question: What does Gov. Code 12950.1(f) say?
+  gold: [[CA-GOV-12950.1, "(f)"]]
+  key_facts: ['seasonal|temporary', '30']
+  expect: answered
+
+- id: q48
+  type: identifier
+  question: What is audit finding F-4 about?
+  gold: [[AUD-2026-Q2, "F-4"]]
+  key_facts: ['harassment', '214|transferred|non-california']
+  expect: answered
+
+- id: q49
+  type: version
+  question: What was the new-hire completion window before the January 2026 policy change?
+  gold: [[POL-CT-001-v3.1, "6.1"], [POL-CT-001-v3.2, "11"], [EML-2025-12-policy-update, ""]]
+  key_facts: ['\b45\b']
+  expect: answered
+
+- id: q50
+  type: version
+  question: What changed in version 3.2 of the compliance training policy?
+  gold: [[POL-CT-001-v3.2, "11"], [EML-2025-12-policy-update, ""]]
+  key_facts: ['30', 'HIPAA|annual', 'harassment|all u\.?s\.?']
+  expect: answered
+
+- id: q51
+  type: version
+  question: How often do clinic staff take HIPAA refresher training now?
+  gold: [[POL-CT-001-v3.2, "7.2"], [CAT-2026, "PRV-HIP-110"]]
+  key_facts: ['annual|12 months|every year']
+  expect: answered
+
+- id: q52
+  type: version
+  question: What is the current role-change completion window?
+  gold: [[POL-CT-001-v3.2, "6.3"], [SOP-LMS-014, "2"]]
+  key_facts: ['\b14\b']
+  expect: answered
+
+- id: q53
+  type: version
+  question: Under the previous policy version, which employees had to take harassment prevention training?
+  gold: [[POL-CT-001-v3.1, "7.3"], [FAQ-HR-HAR, "Q1"]]
+  key_facts: ['california', 'new york', 'illinois', 'connecticut']
+  expect: answered
+
+- id: q54
+  type: conflict
+  question: A Fresno supervisor says forklift re-evaluations are every 24 months now. Is that right?
+  gold: [[SOP-EHS-007, "4.1"], [POL-CT-001-v3.2, "7"], [29-CFR-1910.178, "(l)(4)"]]
+  key_facts: ['36 months|three years|3 years', 'no|not correct|incorrect|wrong']
+  expect: answered
+
+- id: q55
+  type: conflict
+  question: If an operator clips a rack with a forklift, is rewatching the safety video enough?
+  gold: [[SOP-EHS-007, "4.2"], [29-CFR-1910.178, "(l)(4)(ii)"], [CAT-2026, "retired-courses"]]
+  key_facts: ['no|not enough|not sufficient|insufficient', 'refresher|re-?evaluation|evaluation']
+  expect: answered
+
+- id: q56
+  type: conflict
+  question: Our grace period for overdue annual training is 30 days, right?
+  gold: [[POL-CT-001-v3.2, "8.1"]]
+  key_facts: ['\b15\b']
+  expect: answered
+
+- id: q57
+  type: ambiguous
+  question: How often is refresher training required?
+  gold: []
+  key_facts: []
+  expect: needs_clarification
+
+- id: q58
+  type: ambiguous
+  question: What training does a new employee need?
+  gold: []
+  key_facts: []
+  expect: needs_clarification
+
+- id: q59
+  type: ambiguous
+  question: How long is the course?
+  gold: []
+  key_facts: []
+  expect: needs_clarification
+
+- id: q60
+  type: policy_fact
+  question: Who has to approve a training exemption, and how long does it last?
+  gold: [[SOP-LMS-030, "5.1"]]
+  key_facts: ['manager', 'EHS', '12 months']
+  expect: answered
+
+- id: q61
+  type: insufficient
+  question: What is the passing score for the EHS-FL-201 forklift practical evaluation?
+  gold: []
+  key_facts: []
+  expect: insufficient_context
+
+- id: q62
+  type: insufficient
+  question: What is the OSHA penalty amount for missing bloodborne pathogens training?
+  gold: []
+  key_facts: []
+  expect: insufficient_context
+
+- id: q63
+  type: insufficient
+  question: Which vendor provides the Northwind LMS?
+  gold: []
+  key_facts: []
+  expect: insufficient_context
+
+- id: q64
+  type: insufficient
+  question: What does New York law require for harassment prevention training?
+  gold: []
+  key_facts: []
+  expect: insufficient_context
+
+- id: q65
+  type: insufficient
+  question: What is the training budget for the Reno Components Plant?
+  gold: []
+  key_facts: []
+  expect: insufficient_context
+
+- id: q66
+  type: out_of_scope
+  question: What is Northwind's parental leave policy?
+  gold: []
+  key_facts: []
+  expect: out_of_scope
+
+- id: q67
+  type: out_of_scope
+  question: Write a Python function that reverses a linked list.
+  gold: []
+  key_facts: []
+  expect: out_of_scope
+
+- id: q68
+  type: out_of_scope
+  question: What will the weather be in Reno tomorrow?
+  gold: []
+  key_facts: []
+  expect: out_of_scope
+
+- id: q69
+  type: out_of_scope
+  question: How do I reset my VPN password?
+  gold: []
+  key_facts: []
+  expect: out_of_scope
+
+- id: q70
+  type: out_of_scope
+  question: Who won the 2026 football world cup?
+  gold: []
+  key_facts: []
+  expect: out_of_scope
+
+- id: q71
+  type: policy_fact
+  question: Who resolves conflicts between a regulation and an internal procedure?
+  gold: [[POL-CT-001-v3.2, "5"], [POL-CT-001-v3.2, "4.1"]]
+  key_facts: ['compliance office']
+  expect: answered
+
+- id: q72
+  type: policy_fact
+  question: Who are the designated portable fire extinguisher users at the plants?
+  gold: [[MAT-ROLE-2026, "MFG-SUP"]]
+  key_facts: ['production supervisor|MFG-SUP']
+  expect: answered
+
+- id: q73
+  type: policy_fact
+  question: What qualifications must a forklift evaluator have?
+  gold: [[SOP-EHS-007, "3.1"]]
+  key_facts: ['two years|2 years', '36 months|workshop']
+  expect: answered
+
+- id: q74
+  type: policy_fact
+  question: Do employees who voluntarily wear dust masks need respirator training?
+  gold: [[SOP-EHS-012, "5.1"], [29-CFR-1910.134, "(k)(6)"]]
+  key_facts: ['appendix d|information sheet', 'not assigned|no|not required']
+  expect: answered
