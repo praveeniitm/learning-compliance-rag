@@ -3,8 +3,9 @@
 # Fields
 #   id, type, question
 #   gold:        relevant passages as [doc_id, anchor]. A retrieved chunk is relevant if it belongs to
-#                doc_id and covers an anchor equal to, or nested under, the gold anchor
-#                ("(l)(4)" covers "(l)(4)(iii)"; "7" covers "7.2"). An empty anchor means "any part".
+#                doc_id and contains the anchor: a regulation paragraph cite such as "(l)(4)" (which
+#                also covers "(l)(4)(iii)"), or a clause, section or heading that starts with the
+#                anchor ("7" covers "7.2"; "EHS-FL-201"; "Q3"). An empty anchor means any part.
 #                Relevance is defined on document structure, not chunk ids, so every chunking
 #                strategy is scored against the same ground truth.
 #   key_facts:   regexes that a correct answer must all match (case-insensitive). They check the
@@ -211,7 +212,7 @@
 - id: q27
   type: multi_doc
   question: Which courses must a Clinic Nurse complete, and which of them recur every 12 months?
-  gold: [[MAT-ROLE-2026, "CLN-RN"], [CAT-2026, "course-summary"]]
+  gold: [[MAT-ROLE-2026, "CLN-RN"], [CAT-2026, "Course Summary"]]
   key_facts: ['EHS-BBP-100', 'PRV-HIP-110', 'PRV-HIP-120', 'EHS-RSP-110']
   expect: answered
 
@@ -253,7 +254,7 @@
 - id: q33
   type: multi_doc
   question: What LMS changes were released to address the Q2 2026 audit findings?
-  gold: [[RN-LMS-2026-08, "new"]]
+  gold: [[RN-LMS-2026-08, "New"]]
   key_facts: ['reconciliation', 'agency', 'job code']
   expect: answered
 
@@ -323,7 +324,7 @@
 - id: q43
   type: identifier
   question: What replaced the retired course HR-HAR-090 and why?
-  gold: [[CAT-2026, "retired-courses"]]
+  gold: [[CAT-2026, "Retired Courses"]]
   key_facts: ['HR-HAR-100', 'interactive|1-hour|one hour']
   expect: answered
 
@@ -407,7 +408,7 @@
 - id: q55
   type: conflict
   question: If an operator clips a rack with a forklift, is rewatching the safety video enough?
-  gold: [[SOP-EHS-007, "4.2"], [29-CFR-1910.178, "(l)(4)(ii)"], [CAT-2026, "retired-courses"]]
+  gold: [[SOP-EHS-007, "4.2"], [29-CFR-1910.178, "(l)(4)(ii)"], [CAT-2026, "Retired Courses"]]
   key_facts: ['no|not enough|not sufficient|insufficient', 'refresher|re-?evaluation|evaluation']
   expect: answered
 
