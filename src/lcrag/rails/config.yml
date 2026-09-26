@@ -1,0 +1,15 @@
+# NeMo Guardrails configuration. Used through LLMRails.check_async() as graph nodes (no generation by NeMo);
+# the LLM is injected from lcrag.config, so OpenAI / Ollama / vLLM all work.
+rails:
+  config:
+    regex_detection:
+      # Personal data the assistant must never receive or emit: US SSN, payment cards, employee DOB.
+      input:
+        patterns: ['\b\d{3}-\d{2}-\d{4}\b', '\b(?:\d[ -]?){13,16}\b', '\b(?:dob|date of birth)\s*[:=]?\s*\d']
+        case_insensitive: true
+      output:
+        patterns: ['\b\d{3}-\d{2}-\d{4}\b', '\b(?:\d[ -]?){13,16}\b']
+  input:
+    flows: [regex check input, self check input]  # cheap regex first, then the LLM check
+  output:
+    flows: [regex check output, self check output]
