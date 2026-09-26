@@ -21,7 +21,7 @@ from langchain_community.docstore.in_memory import InMemoryDocstore
 from langchain_community.retrievers import BM25Retriever
 from langchain_community.vectorstores import FAISS
 
-from .config import CANDIDATES, EMBED_MODEL, INDEX_DIR, TOP_K, chat_model, embedding_model
+from .config import CANDIDATES, EMBED_MODEL, INDEX_DIR, CHECK_MODEL, TOP_K, chat_model, embedding_model
 from .corpus import load_documents, split_documents
 
 ROLES = ["employee", "manager", "ehs", "lms_admin", "compliance"]
@@ -75,7 +75,7 @@ _VS: dict[int, FAISS] = {}
 
 
 def make_retriever(vs: FAISS, mode: str = "hybrid_rerank", k: int = TOP_K, role: str = "compliance",
-                   as_of: str | None = None):
+                   as_of: str | None = None, rerank_model: str = CHECK_MODEL):
     """mode: dense | bm25 | hybrid | hybrid_rerank"""
     _VS[id(vs)] = vs
     n = CANDIDATES if mode not in ("dense", "bm25") else k
@@ -87,8 +87,10 @@ def make_retriever(vs: FAISS, mode: str = "hybrid_rerank", k: int = TOP_K, role:
     hybrid = EnsembleRetriever(retrievers=[bm25, dense], weights=[0.5, 0.5])  # reciprocal rank fusion
     if mode == "hybrid":
         return hybrid | (lambda docs: docs[:k])
-    return ContextualCompressionRetriever(base_retriever=hybrid,
-                                          base_compressor=LLMListwiseRerank.from_llm(chat_model(), top_n=k))
+    reranked = ContextualCompressionRetriever(base_retriever=hybrid,
+                                              base_compressor=LLMListwiseRerank.from_llm(chat_model(rerank_model), top_n=k))
+    # Small models occasionally return an invalid ranking (out-of-range index): fall back to RRF order.
+    return reranked.with_fallbacks([hybrid | (lambda docs: docs[:k])])
 
 
 if __name__ == "__main__":

@@ -28,8 +28,12 @@ if os.getenv("LLM_CACHE", "1") == "1":
 
     set_llm_cache(SQLiteCache(str(ROOT / ".cache" / "llm.sqlite")))
 
-LLM_MODEL = os.getenv("LLM_MODEL", "gpt-4.1-mini")
-JUDGE_MODEL = os.getenv("JUDGE_MODEL", "gpt-4.1")  # evaluation only; stronger than the generator
+LLM_MODEL = os.getenv("LLM_MODEL", "gpt-4.1-nano")
+# Checking tasks (re-ranking, grounding grader, guardrail classifiers) need a stronger model than
+# generation: with nano, re-rank recall fell 0.906 -> 0.844 and the grader flagged ~80% of faithful
+# answers as unsupported. Generation stays on nano.
+CHECK_MODEL = os.getenv("CHECK_MODEL", "gpt-4.1-mini")
+JUDGE_MODEL = os.getenv("JUDGE_MODEL", "gpt-4.1-mini")  # evaluation only; stronger than the generator
 EMBED_MODEL = os.getenv("EMBED_MODEL", "text-embedding-3-small")
 TOP_K = 5  # chunks given to the generator
 CANDIDATES = 20  # per retriever, before fusion and re-ranking

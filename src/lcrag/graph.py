@@ -30,7 +30,7 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 from pydantic import BaseModel, Field
 
-from .config import LOG_DIR, ROOT, chat_model
+from .config import CHECK_MODEL, LOG_DIR, ROOT, chat_model
 from .guardrails import check_input, check_output
 
 SYSTEM = """You are a compliance-training assistant for Northwind Manufacturing & Health. Answer questions from compliance, HR, EHS and LMS administrators using ONLY the numbered sources.
@@ -84,7 +84,7 @@ def build_graph(vs, mode: str = "hybrid_rerank", checkpointer=None):
     from .store import make_retriever
 
     generator = chat_model().with_structured_output(RAGAnswer)
-    grader = chat_model().with_structured_output(Grade)
+    grader = chat_model(CHECK_MODEL).with_structured_output(Grade)
     rewriter = chat_model().with_structured_output(Standalone)
     retrievers: dict = {}
 
