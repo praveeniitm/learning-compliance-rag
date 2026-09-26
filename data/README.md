@@ -38,8 +38,12 @@ The corpus combines **real public regulations** (the legal source of truth) with
 | SOP-EHS-007 / -012 | EHS SOPs | Forklift certification, respirator fit testing |
 | AUD-2026-Q2 | Audit memo | Findings with numbers, owners, root causes |
 | FAQ-HR-HAR | FAQ | Manager-facing Q&A |
-| EML-* | E-mails | Informal communication, including one **incorrect** claim |
+| EML-* | E-mails | Informal communication, including one **incorrect** claim and one with a **hidden prompt injection** (EML-2026-05-lms-tip) |
 | RN-LMS-2026-08 | Release notes | Most recent change; used to demo index freshness |
+
+### Access levels (front matter `access`)
+
+Regulations and most internal documents are `all`. Restricted: AUD-2026-Q2 (compliance, ehs, lms_admin), EML-2026-03-FRE-forklift (compliance, ehs), RN-LMS-2026-08 (compliance, ehs, lms_admin), SOP-LMS-014 (compliance, lms_admin) and the superseded POL-CT-001-v3.1 (compliance only). Retrieval enforces these per role.
 
 ### Generation method and assumptions
 
