@@ -31,6 +31,10 @@ from .index import CorpusIndex
 from .query import expand
 from .schema import Chunk
 
+LEGAL_TYPES = ("regulation", "statute")
+# Legal intent: the user asks what the law requires, or compares policy with the law.
+_LEGAL_INTENT_RE = re.compile(r"\b(law|laws|legal(ly)?|regulat\w*|osha|hipaa rule|cfr|statute|state law|federal|"
+                              r"required by|compliance with|mandat\w*|compare[sd]?|versus|vs\.?)\b", re.I)
 MODES = ("dense", "sparse", "hybrid", "hybrid_convex", "dense_rerank", "hybrid_rerank")
 _HISTORY_RE = re.compile(r"\b(v?3\.1|version 3\.1|previous|prior|old|older|before 2026|superseded|history|used to|changed?)\b",
                          re.I)
@@ -96,7 +100,7 @@ def _sigmoid(x: float) -> float:
 class Retriever:
     def __init__(self, index: CorpusIndex, mode: str = "hybrid_rerank", cfg: RetrievalConfig | None = None,
                  source_policy: bool = True, alpha: float = 0.5, expand_query: bool = True,
-                 legal_slot: bool = True) -> None:
+                 legal_slot: bool = False) -> None:
         if mode not in MODES:
             raise ValueError(f"mode must be one of {MODES}")
         self.index, self.mode, self.cfg = index, mode, cfg or get_retrieval_config()
@@ -121,8 +125,11 @@ class Retriever:
         old = [h for h in hits if h.chunk.meta.get("status") == "superseded"]
         return current + old
 
-    def _ensure_legal_basis(self, q_search: str, hits: list[Hit], pool: list[Hit], k: int,
-                            min_score: float = 0.05, n_candidates: int = 8) -> list[Hit]:
+    def _is_legal(self, chunk_id: str) -> bool:
+        return self.index.chunks[chunk_id].meta.get("doc_type") in LEGAL_TYPES
+
+    def _ensure_legal_basis(self, query: str, q_search: str, hits: list[Hit], k: int,
+                            min_score: float = 0.001, n_candidates: int = 10) -> list[Hit]:
         """Guarantee one regulation/statute chunk in the final top-k when a relevant one exists.
 
         Internal documents paraphrase the law ("45 CFR 164.530(b)" appears in the policy table)
@@ -130,17 +137,27 @@ class Retriever:
         Without the regulation in context, the model cannot answer "is this required by law or only
         by our policy?", which is the most common question type in this domain.
 
-        When the top-k contains no legal source, the dense+sparse candidate pool is filtered to
-        regulations/statutes, the best few are re-ranked, and the winner takes the last slot if its
-        relevance clears `min_score`.
+        Trigger: the query shows legal intent ("required by law", "OSHA", "compare with ...") and the
+        top-k contains no legal source. Then a filtered search over regulations/statutes runs, the
+        candidates are re-ranked, and the winner takes the last slot if its relevance clears
+        `min_score`. Without the intent condition, an irrelevant statute took the slot on 3 of 13 dev
+        questions (e.g. an exemption question received Cal. Gov. Code 12950.1(m)).
         """
-        if len(hits) < k or any(h.chunk.meta.get("doc_type") in ("regulation", "statute") for h in hits[:k]):
+        k = min(k, self.cfg.final_k)  # the slot is inside the context window the generator sees
+        if len(hits) < k or any(h.chunk.meta.get("doc_type") in LEGAL_TYPES for h in hits[:k]):
             return hits
-        legal = [h for h in pool if h.chunk.meta.get("doc_type") in ("regulation", "statute")][:n_candidates]
+        if not _LEGAL_INTENT_RE.search(query):
+            return hits
+        # Filtered search: the global top-30 rarely contains the right paragraph (internal documents
+        # win on vocabulary), so the dense and sparse indexes are searched deep and filtered to
+        # legal sources. The flat FAISS index makes a deep search cheap (under 2 ms at k=300).
+        dense = [c for c, _ in self.index.dense.search(q_search, 300) if self._is_legal(c)][:n_candidates]
+        sparse = [c for c, _ in self.index.sparse.search(q_search, 300) if self._is_legal(c)][:n_candidates]
+        legal = [Hit(self.index.chunks[c], 0.0) for c in dict.fromkeys(dense + sparse)]
         if not legal:
             return hits
         if self.mode.endswith("rerank"):
-            legal = self.rerank(q_search, [Hit(h.chunk, h.score, h.dense_rank, h.sparse_rank) for h in legal])
+            legal = self.rerank(q_search, legal)
             if legal[0].rerank_score is not None and legal[0].rerank_score < min_score:
                 return hits
         best = legal[0]
@@ -174,7 +191,6 @@ class Retriever:
 
         ordered = sorted(fused.items(), key=lambda kv: -kv[1])
         hits = [Hit(chunks[c], s, d_rank.get(c), s_rank.get(c)) for c, s in ordered]
-        pool = list(hits)  # full fused candidate list, before re-ranking truncation
 
         if self.mode.endswith("rerank"):
             t0 = time.perf_counter()
@@ -184,6 +200,6 @@ class Retriever:
         hits = self._apply_source_policy(query, hits)
         if self.legal_slot:
             t0 = time.perf_counter()
-            hits = self._ensure_legal_basis(q_search, hits, pool, k)
+            hits = self._ensure_legal_basis(query, q_search, hits, k)
             t["legal_slot"] = (time.perf_counter() - t0) * 1000
         return RetrievalResult(query, hits[:k], {k_: round(v, 1) for k_, v in t.items()})
