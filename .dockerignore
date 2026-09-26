@@ -1,0 +1,9 @@
+.venv
+.env
+.cache
+indexes
+logs
+.git
+*.docx
+__pycache__
+results

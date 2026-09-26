@@ -1,0 +1,38 @@
+name: ci
+on:
+  push:
+  pull_request:
+  workflow_dispatch:  # manual run also executes the (paid, sampled) evaluation
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv venv --python 3.11 && uv pip install -r requirements.txt -e .
+      - run: .venv/bin/python -m pytest -q tests  # offline: no API key needed
+
+  eval:
+    if: github.event_name == 'workflow_dispatch'
+    needs: test
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv venv --python 3.11 && uv pip install -r requirements.txt -e .
+      - run: .venv/bin/python eval/evaluate.py safety
+      - run: .venv/bin/python eval/evaluate.py e2e --n 20
+      - name: Quality gate
+        run: |
+          .venv/bin/python - <<'EOF'
+          import json, sys
+          s = json.load(open("results/e2e.json"))["summary"]["test"]
+          gate = {"faithfulness (judge, share of supported statements)": 0.9, "key-fact accuracy (answerable)": 0.8}
+          bad = {k: s[k] for k, t in gate.items() if (s[k] or 0) < t}
+          sys.exit(f"quality gate failed: {bad}" if bad else 0)
+          EOF
+      - uses: actions/upload-artifact@v4
+        with: {name: results, path: results/}
