@@ -6,6 +6,7 @@ version: "4.0"
 effective_date: 2026-01-01
 status: current
 owner: Learning Systems
+access: compliance,lms_admin
 ---
 
 # SOP-LMS-014 Automated Training Assignment Rules

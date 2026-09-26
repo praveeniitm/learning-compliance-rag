@@ -7,6 +7,7 @@ effective_date: 2024-07-01
 status: superseded
 superseded_on: 2026-01-01
 owner: Compliance Office (compliance@northwind.example)
+access: compliance
 ---
 
 # POL-CT-001 Compliance Training Policy (Version 3.1)

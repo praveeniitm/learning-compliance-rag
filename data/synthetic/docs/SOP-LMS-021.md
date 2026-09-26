@@ -6,6 +6,7 @@ version: "2.3"
 effective_date: 2026-01-01
 status: current
 owner: Learning Systems
+access: all
 ---
 
 # SOP-LMS-021 Overdue Training Escalation

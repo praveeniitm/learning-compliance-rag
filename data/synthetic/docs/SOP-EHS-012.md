@@ -6,6 +6,7 @@ version: "3.0"
 effective_date: 2025-09-01
 status: current
 owner: Environmental Health & Safety
+access: all
 ---
 
 # SOP-EHS-012 Respiratory Protection Training and Fit Testing

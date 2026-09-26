@@ -6,6 +6,7 @@ version: "3.2"
 effective_date: 2026-01-01
 status: current
 owner: Compliance Office (compliance@northwind.example)
+access: all
 ---
 
 # POL-CT-001 Compliance Training Policy (Version 3.2)

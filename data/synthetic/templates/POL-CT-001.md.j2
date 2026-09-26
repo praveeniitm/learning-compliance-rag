@@ -7,6 +7,7 @@ effective_date: {{ p.effective }}
 status: {{ status }}
 {% if status == "superseded" %}superseded_on: {{ p.superseded_on }}
 {% endif %}owner: {{ org.compliance_office }}
+access: {{ "compliance" if status == "superseded" else "all" }}
 ---
 # POL-CT-001 Compliance Training Policy (Version {{ p.version }})
 

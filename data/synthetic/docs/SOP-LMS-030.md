@@ -6,6 +6,7 @@ version: "1.4"
 effective_date: 2025-11-01
 status: current
 owner: Learning Systems
+access: all
 ---
 
 # SOP-LMS-030 External Training Equivalency and Exemptions

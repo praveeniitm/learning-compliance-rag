@@ -6,6 +6,7 @@ version: "2026.1"
 effective_date: 2026-01-15
 status: current
 owner: HR Operations
+access: all
 ---
 
 # FAQ-HR-HAR Harassment Prevention Training: Manager FAQ

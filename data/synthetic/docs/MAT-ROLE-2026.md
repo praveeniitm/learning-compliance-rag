@@ -6,6 +6,7 @@ version: "2026.3"
 effective_date: 2026-03-15
 status: current
 owner: Learning Systems
+access: all
 ---
 
 # MAT-ROLE-2026 Role-to-Curriculum Matrix

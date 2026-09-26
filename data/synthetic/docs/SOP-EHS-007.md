@@ -6,6 +6,7 @@ version: "5.1"
 effective_date: 2026-01-01
 status: current
 owner: Environmental Health & Safety
+access: all
 ---
 
 # SOP-EHS-007 Powered Industrial Truck Operator Training and Certification
