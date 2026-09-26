@@ -2,7 +2,7 @@
 
 The corpus combines **real public regulations** (the legal source of truth) with **synthetic internal documents** for a fictional organization. That mirrors how compliance-training questions are answered in practice: the answer usually lives in the gap between what the law requires and what the organization has decided to enforce.
 
-## 1. Public regulations (`fetch_regulations.py` → `data/raw/`, not committed)
+## 1. Public regulations (`fetch_regulations.py` → `data/regulations/*.md`, committed)
 
 | Doc ID | Citation | Why it is included |
 |---|---|---|
@@ -20,7 +20,7 @@ The corpus combines **real public regulations** (the legal source of truth) with
 | 45-CFR-164.530 | HIPAA Privacy Rule | Workforce training, documentation retention |
 | CA-GOV-12950.1 | Cal. Gov. Code § 12950.1 | Harassment prevention hours, frequency, deadlines |
 
-- **Source:** the [eCFR versioner API](https://www.ecfr.gov/developers/documentation/api/v1), queried **point-in-time** (default `2026-09-01`), so a re-run returns byte-identical text even after amendments. The California statute comes from [leginfo.legislature.ca.gov](https://leginfo.legislature.ca.gov); that site has no point-in-time API, so its SHA-256 is recorded in `manifest.json` to detect drift.
+- **Source:** the [eCFR renderer API](https://www.ecfr.gov/developers/documentation/api/v1), queried **point-in-time** (default `2026-09-01`), so a re-run returns the same text even after amendments. eCFR tags every paragraph with its citation, and the fetcher writes that tag at the start of each line (`[29 CFR 1910.178(l)(4)(iii)] ...`), so chunks carry exact paragraph-level citations. The California statute comes from [leginfo.legislature.ca.gov](https://leginfo.legislature.ca.gov), which has no point-in-time API.
 - **License:** U.S. federal regulations are public domain. California statutes are public law.
 - **Selection rule:** only sections containing explicit *training* obligations (who, what, how often). That bounds the corpus to the question space and keeps the non-training text as realistic hard negatives, for example 1910.1200's roughly 300k characters of classification appendices.
 

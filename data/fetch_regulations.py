@@ -1,143 +1,97 @@
-"""Download the public regulations that make up the "legal source of truth" part of the corpus.
+"""Download the public regulations in the corpus and save them as Markdown with front matter.
 
-Sources (all public domain / freely published government text):
-  * eCFR versioner API: federal regulations as of a pinned snapshot date, so results are
-    reproducible even when the regulation is amended later.
-  * California Legislative Information: Gov. Code 12950.1 (harassment prevention training).
+* Federal: eCFR renderer API, point-in-time (default 2026-09-01), so re-runs are reproducible.
+  The renderer tags each paragraph with its citation (data-title="1910.178(l)(4)(iii)"). That tag is
+  written at the start of each line, so chunks carry exact paragraph-level citations.
+* California: Gov. Code 12950.1 from leginfo.legislature.ca.gov (no point-in-time API).
 
-Each document is saved untouched to data/raw/ and recorded in data/raw/manifest.json with its
-source URL, retrieval time and SHA-256, which is what incremental re-indexing keys on.
-
-Usage:
-    python data/fetch_regulations.py                  # default snapshot date
-    python data/fetch_regulations.py --date 2026-09-24
+Usage: python data/fetch_regulations.py [--date YYYY-MM-DD]
 """
 
-from __future__ import annotations
-
 import argparse
-import hashlib
-import json
 import re
-import time
-from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
+from bs4 import BeautifulSoup
 
-RAW_DIR = Path(__file__).resolve().parent / "raw"
-DEFAULT_DATE = "2026-09-01"
-ECFR_URL = "https://www.ecfr.gov/api/versioner/v1/full/{date}/title-{title}.xml?part={part}&section={section}"
-USER_AGENT = "learning-compliance-rag/0.1 (research; contact via GitHub repo)"
+OUT = Path(__file__).parent / "regulations"
+ECFR = "https://www.ecfr.gov/api/renderer/v1/content/enhanced/{date}/title-{title}?part={part}&section={section}"
+CA = "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=12950.1"
 
-# Sections chosen because they contain explicit *training* obligations (who, what, how often).
-# That is the question space the assistant targets.
-ECFR_SECTIONS: list[tuple[int, str, str]] = [
-    (29, "1910", "1910.38"),    # Emergency action plans - employee training
-    (29, "1910", "1910.95"),    # Occupational noise - annual training program
-    (29, "1910", "1910.132"),   # PPE - general training / retraining
-    (29, "1910", "1910.134"),   # Respiratory protection - annual training, fit testing
-    (29, "1910", "1910.146"),   # Permit-required confined spaces - training
-    (29, "1910", "1910.147"),   # Lockout/tagout - training and retraining
-    (29, "1910", "1910.157"),   # Portable fire extinguishers - annual training
-    (29, "1910", "1910.178"),   # Powered industrial trucks - operator training, 3-yr evaluation
-    (29, "1910", "1910.1030"),  # Bloodborne pathogens - annual training
-    (29, "1910", "1910.1200"),  # Hazard communication - employee information and training
-    (45, "164", "164.308"),     # HIPAA Security Rule - security awareness training
-    (45, "164", "164.530"),     # HIPAA Privacy Rule - workforce training
+# (title, part, section, practitioner label). Regulations rarely use everyday names: 45 CFR 164.530
+# never says "HIPAA" and 1910.178 never says "forklift", so the label goes into every chunk header.
+SECTIONS = [
+    (29, 1910, "1910.38", "OSHA emergency action plan standard (evacuation, fire drills)"),
+    (29, 1910, "1910.95", "OSHA occupational noise / hearing conservation standard"),
+    (29, 1910, "1910.132", "OSHA personal protective equipment (PPE) general standard"),
+    (29, 1910, "1910.134", "OSHA respiratory protection standard (respirators, fit testing, N95)"),
+    (29, 1910, "1910.146", "OSHA permit-required confined spaces standard"),
+    (29, 1910, "1910.147", "OSHA lockout/tagout (LOTO) standard, control of hazardous energy"),
+    (29, 1910, "1910.157", "OSHA portable fire extinguishers standard"),
+    (29, 1910, "1910.178", "OSHA powered industrial trucks (forklift) standard"),
+    (29, 1910, "1910.1030", "OSHA bloodborne pathogens (BBP) standard"),
+    (29, 1910, "1910.1200", "OSHA hazard communication (HazCom, GHS, SDS) standard"),
+    (45, 164, "164.308", "HIPAA Security Rule, administrative safeguards"),
+    (45, 164, "164.530", "HIPAA Privacy Rule, administrative requirements"),
 ]
-
-STATE_SECTIONS = [
-    {
-        "doc_id": "CA-GOV-12950.1",
-        "citation": "Cal. Gov. Code § 12950.1",
-        "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=12950.1",
-    }
-]
+HEADERS = {"User-Agent": "Mozilla/5.0 (learning-compliance-rag research)"}
 
 
-def _session() -> requests.Session:
-    s = requests.Session()
-    s.headers.update({"User-Agent": USER_AGENT, "Accept-Encoding": "gzip, deflate"})
-    return s
+def front_matter(**kv) -> str:
+    return "---\n" + "".join(f'{k}: "{v}"\n' for k, v in kv.items()) + "---\n"
 
 
-def _get(session: requests.Session, url: str, retries: int = 3) -> str:
-    for attempt in range(retries):
-        try:
-            r = session.get(url, timeout=60)
-            r.raise_for_status()
-            # eCFR omits the charset header; requests would then fall back to latin-1 and
-            # mangle "§" and em dashes. Both sources are UTF-8.
-            if "charset" not in r.headers.get("Content-Type", "").lower():
-                r.encoding = "utf-8"
-            return r.text
-        except requests.RequestException:
-            if attempt == retries - 1:
-                raise
-            time.sleep(2 ** attempt)
-    raise RuntimeError("unreachable")
+def fetch_ecfr(title, part, section, topic, date) -> str:
+    url = ECFR.format(date=date, title=title, part=part, section=section)
+    soup = BeautifulSoup(requests.get(url, headers=HEADERS, timeout=60).text, "html.parser")
+    head = " ".join(soup.find(attrs={"data-hierarchy-metadata": True}).get_text().split())
+    lines = [front_matter(doc_id=f"{title}-CFR-{section}", title=head, doc_type="regulation", status="current",
+                          citation=f"{title} CFR {section}", topic=topic, source_url=url, as_of=date),
+             f"# {title} CFR {head.lstrip('§ ')}\n"]
+    for el in soup.find_all(["p", "h1", "h2", "h3", "h4", "h5"]):
+        text = " ".join(el.get_text().split())
+        pid = el.get("data-title") or ""
+        if not text or el.name.startswith("h") and (text == head or "Editorial Note" in text):
+            continue
+        if el.name.startswith("h"):  # appendix headings
+            lines.append(f"\n## {text}\n")
+        elif pid and pid.count("(") == 1:  # top-level paragraph, e.g. (l): becomes a section
+            lines.append(f"\n## {title} CFR {pid}\n[{title} CFR {pid}] {text}")
+        elif pid:
+            lines.append(f"[{title} CFR {pid}] {text}")
+        else:
+            lines.append(text)
+    return "\n".join(lines) + "\n"
 
 
-def _extract_ca_section(html_text: str) -> str:
-    """Keep only the statute body; the page wraps it in navigation and scripts."""
-    start = html_text.find('id="codeLawSectionNoHead"')
-    if start < 0:
-        raise ValueError("statute body not found; page layout may have changed")
-    return html_text[start - 5 : start + 20000]
-
-
-def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--date", default=DEFAULT_DATE, help="eCFR point-in-time date (YYYY-MM-DD)")
-    args = ap.parse_args()
-
-    RAW_DIR.mkdir(parents=True, exist_ok=True)
-    session = _session()
-    manifest: list[dict] = []
-    now = datetime.now(timezone.utc).isoformat(timespec="seconds")
-
-    for title, part, section in ECFR_SECTIONS:
-        url = ECFR_URL.format(date=args.date, title=title, part=part, section=section)
-        text = _get(session, url)
-        doc_id = f"{title}-CFR-{section}"
-        path = RAW_DIR / f"{doc_id}.xml"
-        path.write_text(text, encoding="utf-8")
-        manifest.append(
-            {
-                "doc_id": doc_id,
-                "citation": f"{title} CFR {section}",
-                "format": "ecfr_xml",
-                "path": path.name,
-                "source_url": url,
-                "as_of": args.date,
-                "retrieved_at": now,
-                "sha256": hashlib.sha256(text.encode()).hexdigest(),
-            }
-        )
-        print(f"fetched {doc_id:22s} {len(text):>8,d} chars")
-
-    for spec in STATE_SECTIONS:
-        body = _extract_ca_section(_get(session, spec["url"]))
-        path = RAW_DIR / f"{spec['doc_id']}.html"
-        path.write_text(body, encoding="utf-8")
-        manifest.append(
-            {
-                "doc_id": spec["doc_id"],
-                "citation": spec["citation"],
-                "format": "ca_leginfo_html",
-                "path": path.name,
-                "source_url": spec["url"],
-                "as_of": re.sub(r"T.*", "", now),
-                "retrieved_at": now,
-                "sha256": hashlib.sha256(body.encode()).hexdigest(),
-            }
-        )
-        print(f"fetched {spec['doc_id']:22s} {len(body):>8,d} chars")
-
-    (RAW_DIR / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
-    print(f"wrote manifest with {len(manifest)} documents -> {RAW_DIR / 'manifest.json'}")
+def fetch_ca() -> str:
+    soup = BeautifulSoup(requests.get(CA, headers=HEADERS, timeout=60).text, "html.parser")
+    body = soup.find(id="codeLawSectionNoHead")
+    paras = [p.get_text(" ", strip=True) for p in body.find_all("p")]
+    paras = paras[next(i for i, p in enumerate(paras) if p.startswith("(a)")):]
+    lines, top = [], ""
+    for p in paras:  # cite as subdivision + paragraph, e.g. 12950.1(a)(1); deeper levels inherit
+        marks = re.findall(r"^\s*((?:\(\w+\)\s*)+)", p)
+        groups = re.findall(r"\(\w+\)", marks[0]) if marks else []
+        if groups and re.fullmatch(r"\([a-z]\)", groups[0]) and groups[0] not in ("(i)", "(v)", "(x)") or \
+                groups[:1] == ["(i)"] and top == "(h)":
+            top, groups = groups[0], groups[1:]
+        cite = top + "".join(g for g in groups if g[1].isdigit())
+        lines.append(f"[Cal. Gov. Code 12950.1{cite}] {p}" if groups or cite else p)
+    return (front_matter(doc_id="CA-GOV-12950.1", title="Sexual harassment prevention training", doc_type="statute",
+                         status="current", citation="Cal. Gov. Code 12950.1",
+                         topic="California law on sexual harassment prevention training", source_url=CA)
+            + "# Cal. Gov. Code 12950.1 Sexual harassment prevention training\n\n" + "\n".join(lines) + "\n")
 
 
 if __name__ == "__main__":
-    main()
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--date", default="2026-09-01")
+    date = ap.parse_args().date
+    OUT.mkdir(exist_ok=True)
+    for t, p, s, topic in SECTIONS:
+        (OUT / f"{t}-CFR-{s}.md").write_text(fetch_ecfr(t, p, s, topic, date))
+        print("fetched", s)
+    (OUT / "CA-GOV-12950.1.md").write_text(fetch_ca())
+    print("fetched CA-GOV-12950.1")
