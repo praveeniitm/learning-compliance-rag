@@ -57,10 +57,13 @@ every request ─► logs/audit.jsonl (role, question, rewrite, agent searches, 
 
 | File | Responsibility |
 |---|---|
-| `src/lcrag/corpus.py` | load documents and front matter; 3 chunking strategies |
-| `src/lcrag/store.py` | incremental index sync, BM25 tokenizer, ACL and as-of filter, retriever modes |
-| `src/lcrag/graph.py` | LangGraph agent (plan/search loop), prompts, memory, audit log, cost tracking |
+| `src/lcrag/config.py` | settings, model factories (OpenAI or any OpenAI-compatible server), LLM cache |
+| `src/lcrag/corpus.py` | load Markdown + front matter; 3 chunking strategies |
+| `src/lcrag/store.py` | incremental FAISS index, citation-aware BM25, ACL / as-of / source filter, hybrid retriever |
+| `src/lcrag/prompts.py` | all prompts |
+| `src/lcrag/graph.py` | the LangGraph agent (nodes and edges) |
 | `src/lcrag/guardrails.py`, `rails/` | NeMo Guardrails config and prompts |
+| `src/lcrag/assistant.py` | graph + persistent memory + audit log with cost |
 | `app/app.py` | FastAPI (`/api/ask`, `/api/feedback`, `/api/health`) + Gradio chat UI |
 | `eval/evaluate.py` | retrieval, end-to-end and safety evaluation |
 | `tests/` | offline unit tests (run in CI) |
