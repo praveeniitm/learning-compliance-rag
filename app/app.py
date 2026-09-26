@@ -53,6 +53,7 @@ def api_ask(req: AskIn):
     out = A.ask(req.question, req.thread_id, req.role, req.as_of)
     return {"thread_id": out["thread_id"], "status": out["status"], "answer": out["result"].answer,
             "clarifying_question": out["result"].clarifying_question, "sources": out["log"]["sources"],
+            "searches": out.get("searches", []),
             "cost_usd": out["log"]["cost_usd"], "latency_s": out["log"]["latency_s"]}
 
 
@@ -76,7 +77,9 @@ def chat(message, history, role, as_of, thread_id):
              "⚠️ not verified (queued for review)", "blocked": f"🛡️ blocked by {out.get('blocked_by')}"}
     reply += f"\n\n<sub>{badge.get(out['status'], out['status'])} · {log['latency_s']} s · ${log['cost_usd']}" \
              + (f" · rewritten as: *{out['standalone']}*" if out["standalone"] != message else "") + "</sub>"
-    sources = "\n\n---\n\n".join(f"**[S{i}]** {d.page_content}" for i, d in enumerate(out.get("docs", []), 1))
+    plan = "\n".join(f"{i}. `{x['source']}`: {x['query']}" for i, x in enumerate(out.get("searches", []), 1))
+    sources = (f"**Agent searches**\n{plan}\n\n" if plan else "") + "\n\n---\n\n".join(
+        f"**[S{i}]** {d.page_content}" for i, d in enumerate(out.get("docs", [])[:10], 1))
     return history + [{"role": "user", "content": message}, {"role": "assistant", "content": reply}], "", \
         sources or "_No sources (request blocked or declined)._"
 
@@ -97,7 +100,7 @@ with gr.Blocks(title="Compliance Training Knowledge Assistant") as ui:
     bot = gr.Chatbot(height=420)
     msg = gr.Textbox(label="Question", placeholder="Ask about a training requirement...")
     gr.Examples(EXAMPLES, [msg, role])
-    with gr.Accordion("Sources for the last answer", open=False):
+    with gr.Accordion("Agent searches and sources for the last answer", open=False):
         sources = gr.Markdown()
     msg.submit(chat, [msg, bot, role, as_of, thread], [bot, msg, sources])
     with gr.Row():
