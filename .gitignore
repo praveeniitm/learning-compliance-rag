@@ -13,8 +13,6 @@ __pycache__/
 .env
 
 # Generated artifacts (reproducible from scripts)
-data/raw/
-data/processed/
 indexes/
 .cache/
 
@@ -22,3 +20,6 @@ indexes/
 .DS_Store
 .vscode/
 .idea/
+
+# Documents added at runtime (freshness demo)
+data/incoming/

@@ -1,55 +1,40 @@
-"""Central configuration. Everything tunable lives here or in environment variables.
+"""Settings from environment variables / .env.
 
-The LLM client is OpenAI-compatible, so the same code talks to api.openai.com,
-a local Ollama server (http://localhost:11434/v1) or a vLLM deployment.
+OpenAI by default. Any OpenAI-compatible server works by setting a base URL:
+  Ollama: LLM_BASE_URL=EMBED_BASE_URL=http://localhost:11434/v1, LLM_MODEL=qwen2.5:14b-instruct,
+          EMBED_MODEL=nomic-embed-text
+  vLLM:   LLM_BASE_URL=http://<host>:8000/v1
 """
 
-from __future__ import annotations
-
 import os
-from dataclasses import dataclass, field
 from pathlib import Path
 
 from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
 ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(ROOT / ".env")
-
 DATA_DIR = ROOT / "data"
-RAW_DIR = DATA_DIR / "raw"
-SYNTH_DIR = DATA_DIR / "synthetic"
-PROCESSED_DIR = DATA_DIR / "processed"
-INDEX_DIR = ROOT / "indexes"
-EVAL_DIR = ROOT / "eval"
-RESULTS_DIR = ROOT / "results"
+CORPUS_DIRS = [DATA_DIR / "regulations", DATA_DIR / "synthetic" / "docs", DATA_DIR / "incoming"]
+INDEX_DIR, EVAL_DIR, RESULTS_DIR = ROOT / "indexes", ROOT / "eval", ROOT / "results"
+
+LLM_MODEL = os.getenv("LLM_MODEL", "gpt-4.1-mini")
+JUDGE_MODEL = os.getenv("JUDGE_MODEL", "gpt-4.1")  # evaluation only; stronger than the generator
+EMBED_MODEL = os.getenv("EMBED_MODEL", "text-embedding-3-small")
+TOP_K = 5  # chunks given to the generator
+CANDIDATES = 20  # per retriever, before fusion and re-ranking
 
 
-@dataclass(frozen=True)
-class LLMConfig:
-    api_key: str = field(default_factory=lambda: os.getenv("OPENAI_API_KEY", "") or "not-needed")
-    base_url: str | None = field(default_factory=lambda: os.getenv("LLM_BASE_URL") or None)
-    model: str = field(default_factory=lambda: os.getenv("LLM_MODEL", "gpt-4o-mini"))
-    temperature: float = 0.0
-    max_tokens: int = 700
-    timeout_s: float = 120.0
+def _key(base_url):  # local servers ignore the key, but the client requires one
+    return os.getenv("OPENAI_API_KEY") or ("not-needed" if base_url else None)
 
 
-@dataclass(frozen=True)
-class RetrievalConfig:
-    embed_model: str = field(default_factory=lambda: os.getenv("EMBED_MODEL", "BAAI/bge-small-en-v1.5"))
-    rerank_model: str = field(
-        default_factory=lambda: os.getenv("RERANK_MODEL", "cross-encoder/ms-marco-MiniLM-L-6-v2")
-    )
-    dense_k: int = 30
-    sparse_k: int = 30
-    rrf_k: int = 60  # standard RRF constant (Cormack et al., 2009)
-    rerank_candidates: int = 20
-    final_k: int = 5
+def chat_model(model: str = LLM_MODEL) -> ChatOpenAI:
+    base = os.getenv("LLM_BASE_URL") or None
+    return ChatOpenAI(model=model, base_url=base, api_key=_key(base), temperature=0, timeout=120, max_retries=3)
 
 
-def get_llm_config() -> LLMConfig:
-    return LLMConfig()
-
-
-def get_retrieval_config() -> RetrievalConfig:
-    return RetrievalConfig()
+def embedding_model(model: str = EMBED_MODEL) -> OpenAIEmbeddings:
+    base = os.getenv("EMBED_BASE_URL") or None
+    # check_embedding_ctx_length=False sends raw strings, which non-OpenAI servers (Ollama) require
+    return OpenAIEmbeddings(model=model, base_url=base, api_key=_key(base), check_embedding_ctx_length=base is None)
