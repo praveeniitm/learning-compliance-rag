@@ -30,7 +30,7 @@ from .llm import chat, parse_json
 from .query import is_underspecified
 from .retrieval import Hit, Retriever
 
-OOS_THRESHOLD = 0.02  # calibrated on the dev split (see eval/calibrate_oos.py); cross-encoder prob
+OOS_THRESHOLD = 0.002  # calibrated on the dev split (eval/calibrate_oos.py); re-ranker relevance in [0, 1]
 
 AUTHORITY_LABEL = {
     "regulation": "REGULATION (legally binding)",
@@ -53,7 +53,7 @@ Rules:
 3. Distinguish what the LAW requires (regulation/statute sources) from what Northwind POLICY requires. Northwind policy is often stricter; when both are available, state both.
 4. Authority order when sources disagree: regulation/statute > current internal policy > SOP/catalog/matrix > audit/FAQ/release notes > e-mail. Never base an answer on a SUPERSEDED document or an informal e-mail when a current authoritative source covers the point. If a lower-authority source contradicts a higher one, say so briefly.
 5. If the question is underspecified, i.e. the answer depends on something the user did not say (which training topic, job role, site or state) and different cases have different answers, set status to "needs_clarification", ask one short clarifying question, and briefly summarise the main cases. Example: "How often is refresher training required?" does not say which training, and intervals differ by topic, so ask which training is meant.
-6. If the sources do not contain the answer, set status to "insufficient_context" and say what is missing. Do not guess.
+6. If the sources do not contain the answer, set status to "insufficient_context" and say what is missing. Do not guess. If the question is not about compliance training, training policy, courses or LMS procedures at all (e.g. benefits, IT support, general knowledge), set status to "out_of_scope".
 7. Be concise: at most 6 sentences. Quote exact intervals, day counts and course codes.
 8. Put the [S#] tag(s) at the end of every sentence that states a fact; each sentence is verified against the sources it cites. Write self-contained sentences that name their subject (e.g. "Forklift operators must be re-evaluated every 36 months [S2].").
 
@@ -61,7 +61,7 @@ Training topics in this knowledge base (a question about "training" or "refreshe
 
 Return a JSON object only:
 {
-  "status": "answered" | "needs_clarification" | "insufficient_context",
+  "status": "answered" | "needs_clarification" | "insufficient_context" | "out_of_scope",
   "answer": "<answer text with inline [S#] tags>",
   "clarifying_question": "<question or null>"
 }"""
@@ -141,13 +141,13 @@ class Assistant:
             out = {"status": "insufficient_context", "answer": "The model returned an unparseable response.",
                    "claims": []}
         status = out.get("status", "answered")
-        if status not in ("answered", "needs_clarification", "insufficient_context"):
+        if status not in ("answered", "needs_clarification", "insufficient_context", "out_of_scope"):
             status = "answered"
         answer_text = str(out.get("answer", "")).strip()
         claims = answer_claims(answer_text, list(texts))
         cited = sorted(set(re.findall(r"\[(S\d+)\]", answer_text)))
         grounding = {}
-        if self.verify and status != "insufficient_context":
+        if self.verify and status not in ("insufficient_context", "out_of_scope"):
             grounding = check_grounding(claims, texts, cited).to_dict()
         return {"raw": raw, "out": out, "status": status, "answer": answer_text, "cited": cited,
                 "grounding": grounding}

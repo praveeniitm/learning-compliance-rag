@@ -1,0 +1,589 @@
+{
+ "threshold": 0.002,
+ "dev": {
+  "bal_acc": 0.75,
+  "oos_recall": 0.5,
+  "in_domain_pass": 1.0
+ },
+ "test": {
+  "bal_acc": 1.0,
+  "oos_recall": 1.0,
+  "in_domain_pass": 1.0
+ },
+ "sweep_dev": [
+  {
+   "th": 0.0005,
+   "bal_acc": 0.75,
+   "oos_recall": 0.5,
+   "in_domain_pass": 1.0
+  },
+  {
+   "th": 0.001,
+   "bal_acc": 0.75,
+   "oos_recall": 0.5,
+   "in_domain_pass": 1.0
+  },
+  {
+   "th": 0.002,
+   "bal_acc": 0.75,
+   "oos_recall": 0.5,
+   "in_domain_pass": 1.0
+  },
+  {
+   "th": 0.005,
+   "bal_acc": 0.75,
+   "oos_recall": 0.5,
+   "in_domain_pass": 1.0
+  },
+  {
+   "th": 0.01,
+   "bal_acc": 0.75,
+   "oos_recall": 0.5,
+   "in_domain_pass": 1.0
+  },
+  {
+   "th": 0.02,
+   "bal_acc": 0.75,
+   "oos_recall": 0.5,
+   "in_domain_pass": 1.0
+  },
+  {
+   "th": 0.05,
+   "bal_acc": 0.75,
+   "oos_recall": 0.5,
+   "in_domain_pass": 1.0
+  },
+  {
+   "th": 0.1,
+   "bal_acc": 0.75,
+   "oos_recall": 0.5,
+   "in_domain_pass": 1.0
+  },
+  {
+   "th": 0.2,
+   "bal_acc": 0.73,
+   "oos_recall": 0.5,
+   "in_domain_pass": 0.96
+  }
+ ],
+ "scores": [
+  {
+   "id": "q67",
+   "split": "test",
+   "type": "out_of_scope",
+   "oos": true,
+   "score": 1.7200427483641365e-05
+  },
+  {
+   "id": "q68",
+   "split": "test",
+   "type": "out_of_scope",
+   "oos": true,
+   "score": 1.886773430756045e-05
+  },
+  {
+   "id": "q69",
+   "split": "dev",
+   "type": "out_of_scope",
+   "oos": true,
+   "score": 2.9894713741772e-05
+  },
+  {
+   "id": "q70",
+   "split": "test",
+   "type": "out_of_scope",
+   "oos": true,
+   "score": 3.017074975427864e-05
+  },
+  {
+   "id": "q71",
+   "split": "dev",
+   "type": "policy_fact",
+   "oos": false,
+   "score": 0.14016522394572414
+  },
+  {
+   "id": "q66",
+   "split": "dev",
+   "type": "out_of_scope",
+   "oos": true,
+   "score": 0.43885162557881285
+  },
+  {
+   "id": "q62",
+   "split": "test",
+   "type": "insufficient",
+   "oos": false,
+   "score": 0.4689744367293511
+  },
+  {
+   "id": "q27",
+   "split": "test",
+   "type": "multi_doc",
+   "oos": false,
+   "score": 0.53952556848526
+  },
+  {
+   "id": "q65",
+   "split": "test",
+   "type": "insufficient",
+   "oos": false,
+   "score": 0.6371098756790161
+  },
+  {
+   "id": "q63",
+   "split": "dev",
+   "type": "insufficient",
+   "oos": false,
+   "score": 0.7403281331062317
+  },
+  {
+   "id": "q48",
+   "split": "dev",
+   "type": "identifier",
+   "oos": false,
+   "score": 0.7934455767868055
+  },
+  {
+   "id": "q40",
+   "split": "dev",
+   "type": "multi_doc",
+   "oos": false,
+   "score": 0.8720941154939019
+  },
+  {
+   "id": "q55",
+   "split": "dev",
+   "type": "conflict",
+   "oos": false,
+   "score": 0.935790028050206
+  },
+  {
+   "id": "q17",
+   "split": "test",
+   "type": "reg_fact",
+   "oos": false,
+   "score": 0.9398133754730225
+  },
+  {
+   "id": "q25",
+   "split": "test",
+   "type": "law_vs_policy",
+   "oos": false,
+   "score": 0.9463454970673961
+  },
+  {
+   "id": "q52",
+   "split": "dev",
+   "type": "version",
+   "oos": false,
+   "score": 0.9471147302211959
+  },
+  {
+   "id": "q15",
+   "split": "test",
+   "type": "reg_fact",
+   "oos": false,
+   "score": 0.9524720971381402
+  },
+  {
+   "id": "q21",
+   "split": "test",
+   "type": "law_vs_policy",
+   "oos": false,
+   "score": 0.9568056806699169
+  },
+  {
+   "id": "q59",
+   "split": "test",
+   "type": "ambiguous",
+   "oos": false,
+   "score": 0.9661298394203186
+  },
+  {
+   "id": "q72",
+   "split": "test",
+   "type": "policy_fact",
+   "oos": false,
+   "score": 0.9713470984437416
+  },
+  {
+   "id": "q58",
+   "split": "dev",
+   "type": "ambiguous",
+   "oos": false,
+   "score": 0.9777392247432817
+  },
+  {
+   "id": "q28",
+   "split": "test",
+   "type": "multi_doc",
+   "oos": false,
+   "score": 0.9779008021537761
+  },
+  {
+   "id": "q23",
+   "split": "test",
+   "type": "law_vs_policy",
+   "oos": false,
+   "score": 0.9786188784792655
+  },
+  {
+   "id": "q34",
+   "split": "dev",
+   "type": "multi_doc",
+   "oos": false,
+   "score": 0.9799058964095824
+  },
+  {
+   "id": "q30",
+   "split": "test",
+   "type": "multi_doc",
+   "oos": false,
+   "score": 0.980507577377819
+  },
+  {
+   "id": "q24",
+   "split": "dev",
+   "type": "law_vs_policy",
+   "oos": false,
+   "score": 0.9835148480017314
+  },
+  {
+   "id": "q49",
+   "split": "test",
+   "type": "version",
+   "oos": false,
+   "score": 0.9840454978228844
+  },
+  {
+   "id": "q38",
+   "split": "test",
+   "type": "multi_doc",
+   "oos": false,
+   "score": 0.9851428569021888
+  },
+  {
+   "id": "q37",
+   "split": "test",
+   "type": "multi_doc",
+   "oos": false,
+   "score": 0.9870825064877815
+  },
+  {
+   "id": "q60",
+   "split": "dev",
+   "type": "policy_fact",
+   "oos": false,
+   "score": 0.9873227553980529
+  },
+  {
+   "id": "q64",
+   "split": "test",
+   "type": "insufficient",
+   "oos": false,
+   "score": 0.9884470791874126
+  },
+  {
+   "id": "q47",
+   "split": "test",
+   "type": "identifier",
+   "oos": false,
+   "score": 0.9906499990550576
+  },
+  {
+   "id": "q41",
+   "split": "test",
+   "type": "identifier",
+   "oos": false,
+   "score": 0.9919311226137411
+  },
+  {
+   "id": "q31",
+   "split": "dev",
+   "type": "multi_doc",
+   "oos": false,
+   "score": 0.9921720176020837
+  },
+  {
+   "id": "q09",
+   "split": "test",
+   "type": "reg_fact",
+   "oos": false,
+   "score": 0.9922383989413005
+  },
+  {
+   "id": "q01",
+   "split": "dev",
+   "type": "reg_fact",
+   "oos": false,
+   "score": 0.9931731425241308
+  },
+  {
+   "id": "q08",
+   "split": "test",
+   "type": "reg_fact",
+   "oos": false,
+   "score": 0.9931770469704898
+  },
+  {
+   "id": "q11",
+   "split": "dev",
+   "type": "reg_fact",
+   "oos": false,
+   "score": 0.993327665978586
+  },
+  {
+   "id": "q33",
+   "split": "test",
+   "type": "multi_doc",
+   "oos": false,
+   "score": 0.9933452399901239
+  },
+  {
+   "id": "q57",
+   "split": "test",
+   "type": "ambiguous",
+   "oos": false,
+   "score": 0.993929357888553
+  },
+  {
+   "id": "q43",
+   "split": "test",
+   "type": "identifier",
+   "oos": false,
+   "score": 0.9945184747487366
+  },
+  {
+   "id": "q35",
+   "split": "dev",
+   "type": "multi_doc",
+   "oos": false,
+   "score": 0.9945767281203365
+  },
+  {
+   "id": "q29",
+   "split": "test",
+   "type": "multi_doc",
+   "oos": false,
+   "score": 0.9947326507959563
+  },
+  {
+   "id": "q20",
+   "split": "dev",
+   "type": "reg_fact",
+   "oos": false,
+   "score": 0.9951831186174946
+  },
+  {
+   "id": "q51",
+   "split": "test",
+   "type": "version",
+   "oos": false,
+   "score": 0.9955087082245458
+  },
+  {
+   "id": "q46",
+   "split": "dev",
+   "type": "identifier",
+   "oos": false,
+   "score": 0.9959268555290289
+  },
+  {
+   "id": "q36",
+   "split": "test",
+   "type": "multi_doc",
+   "oos": false,
+   "score": 0.9960865075175047
+  },
+  {
+   "id": "q10",
+   "split": "dev",
+   "type": "reg_fact",
+   "oos": false,
+   "score": 0.9962193549945209
+  },
+  {
+   "id": "q56",
+   "split": "test",
+   "type": "conflict",
+   "oos": false,
+   "score": 0.9963254943925539
+  },
+  {
+   "id": "q42",
+   "split": "dev",
+   "type": "identifier",
+   "oos": false,
+   "score": 0.9963833629865847
+  },
+  {
+   "id": "q54",
+   "split": "test",
+   "type": "conflict",
+   "oos": false,
+   "score": 0.997464876625052
+  },
+  {
+   "id": "q45",
+   "split": "test",
+   "type": "identifier",
+   "oos": false,
+   "score": 0.9975747085142777
+  },
+  {
+   "id": "q44",
+   "split": "test",
+   "type": "identifier",
+   "oos": false,
+   "score": 0.997788403145725
+  },
+  {
+   "id": "q03",
+   "split": "dev",
+   "type": "law_vs_policy",
+   "oos": false,
+   "score": 0.9979371033443687
+  },
+  {
+   "id": "q53",
+   "split": "test",
+   "type": "version",
+   "oos": false,
+   "score": 0.9980352544102145
+  },
+  {
+   "id": "q61",
+   "split": "dev",
+   "type": "insufficient",
+   "oos": false,
+   "score": 0.9981707166563136
+  },
+  {
+   "id": "q16",
+   "split": "test",
+   "type": "reg_fact",
+   "oos": false,
+   "score": 0.9983114152111924
+  },
+  {
+   "id": "q32",
+   "split": "test",
+   "type": "multi_doc",
+   "oos": false,
+   "score": 0.9984512425925229
+  },
+  {
+   "id": "q22",
+   "split": "test",
+   "type": "law_vs_policy",
+   "oos": false,
+   "score": 0.9986616669306325
+  },
+  {
+   "id": "q39",
+   "split": "dev",
+   "type": "multi_doc",
+   "oos": false,
+   "score": 0.9987216925002624
+  },
+  {
+   "id": "q18",
+   "split": "dev",
+   "type": "reg_fact",
+   "oos": false,
+   "score": 0.9988000796167863
+  },
+  {
+   "id": "q04",
+   "split": "test",
+   "type": "policy_fact",
+   "oos": false,
+   "score": 0.9992582485224386
+  },
+  {
+   "id": "q12",
+   "split": "test",
+   "type": "reg_fact",
+   "oos": false,
+   "score": 0.9992701816920617
+  },
+  {
+   "id": "q06",
+   "split": "test",
+   "type": "reg_fact",
+   "oos": false,
+   "score": 0.9993650160649562
+  },
+  {
+   "id": "q14",
+   "split": "dev",
+   "type": "reg_fact",
+   "oos": false,
+   "score": 0.9994335234371035
+  },
+  {
+   "id": "q07",
+   "split": "test",
+   "type": "reg_fact",
+   "oos": false,
+   "score": 0.999438984517548
+  },
+  {
+   "id": "q50",
+   "split": "dev",
+   "type": "version",
+   "oos": false,
+   "score": 0.9995202500175133
+  },
+  {
+   "id": "q73",
+   "split": "test",
+   "type": "policy_fact",
+   "oos": false,
+   "score": 0.9995441156012708
+  },
+  {
+   "id": "q26",
+   "split": "test",
+   "type": "law_vs_policy",
+   "oos": false,
+   "score": 0.999582589349129
+  },
+  {
+   "id": "q13",
+   "split": "test",
+   "type": "reg_fact",
+   "oos": false,
+   "score": 0.9996208674320888
+  },
+  {
+   "id": "q05",
+   "split": "dev",
+   "type": "policy_fact",
+   "oos": false,
+   "score": 0.9996229042144864
+  },
+  {
+   "id": "q02",
+   "split": "test",
+   "type": "policy_fact",
+   "oos": false,
+   "score": 0.9996702606030918
+  },
+  {
+   "id": "q19",
+   "split": "test",
+   "type": "reg_fact",
+   "oos": false,
+   "score": 0.9998171732324264
+  },
+  {
+   "id": "q74",
+   "split": "test",
+   "type": "policy_fact",
+   "oos": false,
+   "score": 0.9998699961978993
+  }
+ ]
+}
