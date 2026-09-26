@@ -1,0 +1,5596 @@
+{
+ "summary": [
+  {
+   "config": "dense",
+   "test P@5": 0.292,
+   "test R@5": 0.791,
+   "test Hit@5": 0.923,
+   "test MRR": 0.751,
+   "dev R@5": 0.803
+  },
+  {
+   "config": "BM25",
+   "test P@5": 0.236,
+   "test R@5": 0.688,
+   "test Hit@5": 0.872,
+   "test MRR": 0.692,
+   "dev R@5": 0.795
+  },
+  {
+   "config": "hybrid RRF",
+   "test P@5": 0.287,
+   "test R@5": 0.799,
+   "test Hit@5": 0.949,
+   "test MRR": 0.796,
+   "dev R@5": 0.886
+  },
+  {
+   "config": "hybrid RRF + LLM re-rank (default)",
+   "test P@5": 0.344,
+   "test R@5": 0.944,
+   "test Hit@5": 1.0,
+   "test MRR": 0.957,
+   "dev R@5": 0.909
+  },
+  {
+   "config": "chunking: no contextual header, dense",
+   "test P@5": 0.262,
+   "test R@5": 0.697,
+   "test Hit@5": 0.821,
+   "test MRR": 0.675,
+   "dev R@5": 0.659
+  },
+  {
+   "config": "chunking: no contextual header, full",
+   "test P@5": 0.292,
+   "test R@5": 0.821,
+   "test Hit@5": 0.923,
+   "test MRR": 0.841,
+   "dev R@5": 0.894
+  },
+  {
+   "config": "chunking: fixed 320 tokens, dense",
+   "test P@5": 0.277,
+   "test R@5": 0.735,
+   "test Hit@5": 0.897,
+   "test MRR": 0.71,
+   "dev R@5": 0.75
+  },
+  {
+   "config": "chunking: fixed 320 tokens, full",
+   "test P@5": 0.303,
+   "test R@5": 0.885,
+   "test Hit@5": 1.0,
+   "test MRR": 0.835,
+   "dev R@5": 0.871
+  },
+  {
+   "config": "embedding: 3-large, dense",
+   "test P@5": 0.323,
+   "test R@5": 0.859,
+   "test Hit@5": 0.974,
+   "test MRR": 0.893,
+   "dev R@5": 0.826
+  },
+  {
+   "config": "embedding: 3-large, full",
+   "test P@5": 0.359,
+   "test R@5": 0.962,
+   "test Hit@5": 1.0,
+   "test MRR": 0.949,
+   "dev R@5": 0.924
+  }
+ ],
+ "per_question": {
+  "dense": [
+   {
+    "id": "q01",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q02",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q03",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q04",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q05",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q06",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q07",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q08",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q09",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q10",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q11",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q12",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q13",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q14",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q15",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q16",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q17",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q18",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q19",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q20",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q21",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.8,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q22",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q23",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q24",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q25",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.8,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q26",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q27",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.2
+   },
+   {
+    "id": "q28",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q29",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q30",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q31",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q32",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q33",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q34",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q35",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q36",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q37",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q38",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q39",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.3333333333333333,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q40",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q41",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q42",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q43",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q44",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q45",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q46",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q47",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q48",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.2
+   },
+   {
+    "id": "q49",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q50",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q51",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q52",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q53",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q54",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.3333333333333333,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q55",
+    "type": "conflict",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q56",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q60",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q71",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q72",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q73",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q74",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   }
+  ],
+  "BM25": [
+   {
+    "id": "q01",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q02",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q03",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q04",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q05",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q06",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q07",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q08",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q09",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q10",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q11",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q12",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q13",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q14",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.3333333333333333,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q15",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q16",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q17",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q18",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q19",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q20",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q21",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.3333333333333333,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q22",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q23",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q24",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q25",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.3333333333333333,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q26",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q27",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q28",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q29",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q30",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q31",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q32",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q33",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q34",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q35",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q36",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q37",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q38",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q39",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q40",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q41",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q42",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q43",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q44",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q45",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q46",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q47",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q48",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q49",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q50",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q51",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q52",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q53",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q54",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q55",
+    "type": "conflict",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.3333333333333333,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q56",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q60",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q71",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q72",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q73",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q74",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   }
+  ],
+  "hybrid RRF": [
+   {
+    "id": "q01",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q02",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q03",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q04",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q05",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q06",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q07",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q08",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q09",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q10",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q11",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q12",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q13",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q14",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q15",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q16",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q17",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q18",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q19",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q20",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q21",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.3333333333333333,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q22",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q23",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q24",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q25",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q26",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q27",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q28",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q29",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q30",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q31",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q32",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q33",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q34",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q35",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q36",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q37",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q38",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q39",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q40",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q41",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.2
+   },
+   {
+    "id": "q42",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q43",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q44",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q45",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q46",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q47",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q48",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q49",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q50",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q51",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q52",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q53",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q54",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q55",
+    "type": "conflict",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q56",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q60",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q71",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q72",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q73",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q74",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   }
+  ],
+  "hybrid RRF + LLM re-rank (default)": [
+   {
+    "id": "q01",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q02",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q03",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q04",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q05",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q06",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q07",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q08",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q09",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q10",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q11",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q12",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q13",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q14",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q15",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.8,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q16",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q17",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q18",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q19",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q20",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q21",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q22",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q23",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q24",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q25",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q26",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q27",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q28",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q29",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q30",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q31",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q32",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q33",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q34",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q35",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q36",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q37",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q38",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q39",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q40",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q41",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q42",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q43",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q44",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q45",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q46",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q47",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q48",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q49",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q50",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q51",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q52",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q53",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q54",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q55",
+    "type": "conflict",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q56",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q60",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q71",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q72",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q73",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q74",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   }
+  ],
+  "chunking: no contextual header, dense": [
+   {
+    "id": "q01",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q02",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q03",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q04",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q05",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q06",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q07",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q08",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q09",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q10",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q11",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q12",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q13",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q14",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q15",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.8,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q16",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q17",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q18",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q19",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q20",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q21",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q22",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q23",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q24",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q25",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q26",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q27",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q28",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q29",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q30",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q31",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q32",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q33",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q34",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q35",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q36",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q37",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q38",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q39",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.3333333333333333,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q40",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q41",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q42",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q43",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q44",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q45",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q46",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q47",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q48",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q49",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q50",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q51",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q52",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.2
+   },
+   {
+    "id": "q53",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q54",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.3333333333333333,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q55",
+    "type": "conflict",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q56",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q60",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q71",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q72",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q73",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q74",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   }
+  ],
+  "chunking: no contextual header, full": [
+   {
+    "id": "q01",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q02",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q03",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q04",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q05",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q06",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.2
+   },
+   {
+    "id": "q07",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q08",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q09",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q10",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q11",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q12",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q13",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q14",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q15",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q16",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q17",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q18",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q19",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q20",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q21",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q22",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q23",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q24",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q25",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q26",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q27",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q28",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q29",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q30",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q31",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q32",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q33",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q34",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q35",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q36",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q37",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q38",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q39",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q40",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q41",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q42",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q43",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q44",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q45",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q46",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q47",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q48",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q49",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q50",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q51",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q52",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q53",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q54",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.3333333333333333,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q55",
+    "type": "conflict",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q56",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q60",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q71",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q72",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q73",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q74",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   }
+  ],
+  "chunking: fixed 320 tokens, dense": [
+   {
+    "id": "q01",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q02",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q03",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q04",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q05",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q06",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q07",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q08",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q09",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q10",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q11",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q12",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q13",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q14",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q15",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.8,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q16",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q17",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q18",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q19",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q20",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q21",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q22",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q23",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q24",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q25",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.3333333333333333,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q26",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q27",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q28",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q29",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q30",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q31",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q32",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q33",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q34",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q35",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q36",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q37",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q38",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.2
+   },
+   {
+    "id": "q39",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q40",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q41",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q42",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q43",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q44",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q45",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q46",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q47",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q48",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q49",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q50",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q51",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q52",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q53",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q54",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q55",
+    "type": "conflict",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q56",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q60",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q71",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q72",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q73",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q74",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   }
+  ],
+  "chunking: fixed 320 tokens, full": [
+   {
+    "id": "q01",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q02",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q03",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q04",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q05",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q06",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q07",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q08",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q09",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q10",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q11",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q12",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q13",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q14",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q15",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.8,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q16",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.3333333333333333,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q17",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q18",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q19",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q20",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q21",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q22",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q23",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q24",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q25",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.3333333333333333,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q26",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q27",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q28",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q29",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q30",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q31",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q32",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q33",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q34",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q35",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q36",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q37",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q38",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q39",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q40",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q41",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q42",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q43",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q44",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q45",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q46",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q47",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q48",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q49",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q50",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q51",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q52",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q53",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q54",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.3333333333333333,
+    "Hit@5": 1.0,
+    "MRR": 0.25
+   },
+   {
+    "id": "q55",
+    "type": "conflict",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.3333333333333333,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q56",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q60",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q71",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q72",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q73",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q74",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   }
+  ],
+  "embedding: 3-large, dense": [
+   {
+    "id": "q01",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q02",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q03",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q04",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q05",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q06",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q07",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q08",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q09",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q10",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q11",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q12",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q13",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q14",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q15",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q16",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q17",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q18",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q19",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q20",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q21",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q22",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q23",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q24",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q25",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.8,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q26",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q27",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q28",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q29",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q30",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q31",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q32",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q33",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q34",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q35",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q36",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q37",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q38",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q39",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q40",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q41",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q42",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q43",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q44",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q45",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.3333333333333333
+   },
+   {
+    "id": "q46",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q47",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q48",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.2
+   },
+   {
+    "id": "q49",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q50",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q51",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q52",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q53",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q54",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q55",
+    "type": "conflict",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q56",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q60",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q71",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q72",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.0,
+    "R@5": 0.0,
+    "Hit@5": 0.0,
+    "MRR": 0.0
+   },
+   {
+    "id": "q73",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q74",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   }
+  ],
+  "embedding: 3-large, full": [
+   {
+    "id": "q01",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q02",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q03",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q04",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q05",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q06",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q07",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q08",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q09",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q10",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q11",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q12",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q13",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q14",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q15",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.8,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q16",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q17",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q18",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q19",
+    "type": "reg_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q20",
+    "type": "reg_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q21",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q22",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q23",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q24",
+    "type": "law_vs_policy",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q25",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.8,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q26",
+    "type": "law_vs_policy",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q27",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 0.5,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q28",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q29",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q30",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q31",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q32",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q33",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q34",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q35",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q36",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q37",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q38",
+    "type": "multi_doc",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q39",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q40",
+    "type": "multi_doc",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q41",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q42",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q43",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q44",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q45",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q46",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q47",
+    "type": "identifier",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q48",
+    "type": "identifier",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q49",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.6,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q50",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q51",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q52",
+    "type": "version",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q53",
+    "type": "version",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q54",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 0.6666666666666666,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q55",
+    "type": "conflict",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 0.3333333333333333,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q56",
+    "type": "conflict",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 0.5
+   },
+   {
+    "id": "q60",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q71",
+    "type": "policy_fact",
+    "split": "dev",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q72",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q73",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.2,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   },
+   {
+    "id": "q74",
+    "type": "policy_fact",
+    "split": "test",
+    "P@5": 0.4,
+    "R@5": 1.0,
+    "Hit@5": 1.0,
+    "MRR": 1.0
+   }
+  ]
+ }
+}
