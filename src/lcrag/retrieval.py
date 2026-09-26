@@ -95,11 +95,13 @@ def _sigmoid(x: float) -> float:
 
 class Retriever:
     def __init__(self, index: CorpusIndex, mode: str = "hybrid_rerank", cfg: RetrievalConfig | None = None,
-                 source_policy: bool = True, alpha: float = 0.5, expand_query: bool = True) -> None:
+                 source_policy: bool = True, alpha: float = 0.5, expand_query: bool = True,
+                 legal_slot: bool = True) -> None:
         if mode not in MODES:
             raise ValueError(f"mode must be one of {MODES}")
         self.index, self.mode, self.cfg = index, mode, cfg or get_retrieval_config()
         self.source_policy, self.alpha, self.expand_query = source_policy, alpha, expand_query
+        self.legal_slot = legal_slot
 
     def rerank(self, query: str, hits: list[Hit]) -> list[Hit]:
         if not hits:
@@ -118,6 +120,32 @@ class Retriever:
         current = [h for h in hits if h.chunk.meta.get("status") != "superseded"]
         old = [h for h in hits if h.chunk.meta.get("status") == "superseded"]
         return current + old
+
+    def _ensure_legal_basis(self, q_search: str, hits: list[Hit], pool: list[Hit], k: int,
+                            min_score: float = 0.05, n_candidates: int = 8) -> list[Hit]:
+        """Guarantee one regulation/statute chunk in the final top-k when a relevant one exists.
+
+        Internal documents paraphrase the law ("45 CFR 164.530(b)" appears in the policy table)
+        and use the organization's vocabulary, so they often out-rank the regulation itself.
+        Without the regulation in context, the model cannot answer "is this required by law or only
+        by our policy?", which is the most common question type in this domain.
+
+        When the top-k contains no legal source, the dense+sparse candidate pool is filtered to
+        regulations/statutes, the best few are re-ranked, and the winner takes the last slot if its
+        relevance clears `min_score`.
+        """
+        if len(hits) < k or any(h.chunk.meta.get("doc_type") in ("regulation", "statute") for h in hits[:k]):
+            return hits
+        legal = [h for h in pool if h.chunk.meta.get("doc_type") in ("regulation", "statute")][:n_candidates]
+        if not legal:
+            return hits
+        if self.mode.endswith("rerank"):
+            legal = self.rerank(q_search, [Hit(h.chunk, h.score, h.dense_rank, h.sparse_rank) for h in legal])
+            if legal[0].rerank_score is not None and legal[0].rerank_score < min_score:
+                return hits
+        best = legal[0]
+        rest = [h for h in hits if h.chunk.chunk_id != best.chunk.chunk_id]
+        return rest[: k - 1] + [best] + rest[k - 1 :]
 
     def retrieve(self, query: str, k: int | None = None) -> RetrievalResult:
         k = k or self.cfg.final_k
@@ -146,6 +174,7 @@ class Retriever:
 
         ordered = sorted(fused.items(), key=lambda kv: -kv[1])
         hits = [Hit(chunks[c], s, d_rank.get(c), s_rank.get(c)) for c, s in ordered]
+        pool = list(hits)  # full fused candidate list, before re-ranking truncation
 
         if self.mode.endswith("rerank"):
             t0 = time.perf_counter()
@@ -153,4 +182,8 @@ class Retriever:
             t["rerank"] = (time.perf_counter() - t0) * 1000
 
         hits = self._apply_source_policy(query, hits)
+        if self.legal_slot:
+            t0 = time.perf_counter()
+            hits = self._ensure_legal_basis(q_search, hits, pool, k)
+            t["legal_slot"] = (time.perf_counter() - t0) * 1000
         return RetrievalResult(query, hits[:k], {k_: round(v, 1) for k_, v in t.items()})
