@@ -17,6 +17,16 @@ load_dotenv(ROOT / ".env")
 DATA_DIR = ROOT / "data"
 CORPUS_DIRS = [DATA_DIR / "regulations", DATA_DIR / "synthetic" / "docs", DATA_DIR / "incoming"]
 INDEX_DIR, EVAL_DIR, RESULTS_DIR = ROOT / "indexes", ROOT / "eval", ROOT / "results"
+LOG_DIR = ROOT / "logs"  # audit.jsonl (every request), feedback.jsonl
+(ROOT / ".cache").mkdir(exist_ok=True)
+
+# Exact-match LLM cache (temperature 0 -> identical prompts give identical answers): repeated
+# questions cost nothing. Tracing: set LANGSMITH_TRACING=true + LANGSMITH_API_KEY, no code needed.
+if os.getenv("LLM_CACHE", "1") == "1":
+    from langchain_community.cache import SQLiteCache
+    from langchain_core.globals import set_llm_cache
+
+    set_llm_cache(SQLiteCache(str(ROOT / ".cache" / "llm.sqlite")))
 
 LLM_MODEL = os.getenv("LLM_MODEL", "gpt-4.1-mini")
 JUDGE_MODEL = os.getenv("JUDGE_MODEL", "gpt-4.1")  # evaluation only; stronger than the generator
