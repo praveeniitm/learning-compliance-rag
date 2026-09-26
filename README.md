@@ -1,6 +1,6 @@
 # Learning Compliance RAG
 
-A retrieval-augmented assistant for **compliance-training questions**. It answers from OSHA and HIPAA regulations, California law, and an organization's policies, SOPs and course catalog. Every answer cites the exact regulation paragraph or policy clause, separates legal requirements from internal rules, and respects who is asking. The assistant remembers the conversation, can answer "as of" a past date, and is wrapped in guardrails.
+An **agentic RAG** assistant for **compliance-training questions**, built with LangGraph. It answers from OSHA and HIPAA regulations, California law, and an organization's policies, SOPs and course catalog. Every answer cites the exact regulation paragraph or policy clause, separates legal requirements from internal rules, and respects who is asking. The assistant remembers the conversation, can answer "as of" a past date, and is wrapped in guardrails.
 
 **Stack:** LangChain · LangGraph · NeMo Guardrails · FAISS + BM25 · OpenAI (`gpt-4.1-nano` / `gpt-4.1-mini`, `text-embedding-3-small`; Ollama or vLLM also work through an OpenAI-compatible base URL) · FastAPI + Gradio.
 
@@ -27,24 +27,39 @@ Details: [data/README.md](data/README.md).
 
 ## Architecture
 
+A custom LangGraph RAG agent: the model plans its own searches, while the code controls access, grounding and safety.
+
 ```
-                         ┌──────────── LangGraph (SQLite checkpointer = conversation memory) ─────────────┐
-question, role, as_of ─► │ contextualize ─► guard_input ─► retrieve ─► generate ─► grade ─► guard_output ─► │─► answer + [S#] citations
-                         │ (rewrite         (NeMo: PII     (ACL +      (structured  (unsupported             │   + status
-                         │  follow-up)       regex, jail-   as-of       output)      statements?             │
-                         │                   break, topic)  filter)          ▲         revise once) ──┘      │
-                         └────────────────────────────────────────────────────────────────────────────────┘
-retrieve = BM25 (citation-aware tokens) + FAISS dense ─► RRF (EnsembleRetriever) ─► LLMListwiseRerank ─► top 5
-ingest   = Markdown + front matter ─► MarkdownHeaderTextSplitter + token splitter + contextual header
-           ─► LangChain index() + SQLRecordManager (hash-based incremental sync) ─► FAISS
-every request ─► logs/audit.jsonl (role, question, rewrite, sources, status, tokens, $ cost, review flag)
+                     ┌──────────────── LangGraph (SQLite checkpointer = conversation memory) ────────────────┐
+question, role, ───► │ contextualize ─► guard_input ─► plan ⇄ search ─► generate ─► grade ─► guard_output ─► │─► answer + [S#]
+as_of                │ (rewrite          (NeMo: PII    (tool-calling   (structured (unsupported              │   + status
+                     │  follow-up)        regex, jail-  agent, ≤3      output)     statements?               │
+                     │                    break, topic) searches)           ▲       revise once) ──┘         │
+                     └────────────────────────────────────────────────────────────────────────────────────────┘
+search(query, source=any|regulation|internal)
+       = BM25 (citation-aware) + FAISS dense ─► RRF ─► LLMListwiseRerank ─► top 5, filtered by the caller's ACL + as-of
+ingest = Markdown + front matter ─► header-aware split + contextual header ─► LangChain index() (incremental) ─► FAISS
+every request ─► logs/audit.jsonl (role, question, rewrite, agent searches, sources, status, tokens, $ cost, review flag)
 ```
+
+**Why an agent rather than a fixed pipeline.** The hardest questions in this domain need more than one lookup, and a single top-5 retrieval serves them badly:
+- *Law vs. policy* ("is the annual HIPAA refresher legally required?"): the agent searches `source="regulation"` and `source="internal"` separately. In one query, internal documents out-rank the regulation that paraphrases them.
+- *Multi-hop* ("which courses does a Clinic Nurse take, and which recur yearly?"): role → curriculum, then course → interval.
+- *Vocabulary gaps and noisy hits*: the agent re-queries with regulatory terms ("powered industrial truck") when results are poor or dominated by an e-mail or a superseded document.
+
+**Control stays in code, not in the model:**
+- The first turn must call the search tool (`tool_choice="required"`), so every answer is grounded.
+- The role and as-of date are applied by the search node from the request. The agent can choose the query and the source, never the permissions.
+- The loop is capped at 3 searches, and duplicate queries are refused.
+- The generator, grader and guardrails are unchanged. They see only the accumulated evidence (at most 10 chunks).
+
+**Trade-off:** 1–3 extra LLM calls per question (planning), about 2–4 s more latency than the fixed pipeline (typically 6–10 s end to end, around $0.003–0.008 per question). The measured results below are from the earlier fixed-pipeline version.
 
 | File | Responsibility |
 |---|---|
 | `src/lcrag/corpus.py` | load documents and front matter; 3 chunking strategies |
 | `src/lcrag/store.py` | incremental index sync, BM25 tokenizer, ACL and as-of filter, retriever modes |
-| `src/lcrag/graph.py` | LangGraph workflow, prompts, memory, audit log, cost tracking |
+| `src/lcrag/graph.py` | LangGraph agent (plan/search loop), prompts, memory, audit log, cost tracking |
 | `src/lcrag/guardrails.py`, `rails/` | NeMo Guardrails config and prompts |
 | `app/app.py` | FastAPI (`/api/ask`, `/api/feedback`, `/api/health`) + Gradio chat UI |
 | `eval/evaluate.py` | retrieval, end-to-end and safety evaluation |
@@ -54,6 +69,7 @@ every request ─► logs/audit.jsonl (role, question, rewrite, sources, status,
 
 | Capability | How it works |
 |---|---|
+| **Agentic retrieval** | A tool-calling planner decides the queries and the source (regulations vs. internal documents), splits multi-part questions and re-queries on poor results. It is bounded (at most 3 searches, no duplicates, first search mandatory), and the searches are shown in the UI and the audit log. |
 | **Grounded, cited answers** | Structured output (answer with `[S#]` citations, status, clarifying question). The prompt enforces an authority order: regulation > current policy > SOP > FAQ > e-mail. |
 | **Hallucination control** | A grader node lists statements the sources don't support. The generator revises once with that feedback. If the revision still fails, the answer is marked `unverified` and flagged `needs_review` in the audit log (a human review queue). |
 | **Access control** | Each document carries an `access` field in its front matter. The filter runs *inside* retrieval (FAISS `filter=` and a per-role BM25 index), so restricted text never reaches the re-ranker, the prompt or a citation. Roles: `employee`, `manager`, `ehs`, `lms_admin`, `compliance`. |
@@ -64,7 +80,7 @@ every request ─► logs/audit.jsonl (role, question, rewrite, sources, status,
 | **Index freshness** | LangChain Indexing API: content-hashed chunks, only new or changed ones embedded, removed files cleaned up. Adding one document re-embedded 2 chunks and skipped 964. |
 | **Cost and observability** | Per-request token usage and $ cost (`get_usage_metadata_callback`), latency, sources and status in `logs/audit.jsonl`. User feedback goes to `logs/feedback.jsonl`. Set `LANGSMITH_TRACING=true` for full traces (no code change). |
 | **Caching** | Exact-match LLM cache (SQLite). At temperature 0, repeated questions cost nothing. |
-| **Model tiering** | Generation on `gpt-4.1-nano`; checking tasks (re-rank, grader, rails) on `gpt-4.1-mini`, where nano measurably failed (see results). |
+| **Model tiering** | Generation on `gpt-4.1-nano`. Decision and checking tasks (search planning, re-rank, grader, rails) on `gpt-4.1-mini`, where nano measurably failed; as the planner, nano skipped the internal-policy search on law-vs-policy questions. |
 | **Resilience** | Re-rank falls back to RRF order if the LLM returns an invalid ranking; `max_retries=3`; rails fail closed. |
 | **API + UI** | FastAPI REST endpoints with OpenAPI docs at `/docs`; Gradio chat with role selector, as-of date, sources, thumbs up/down. |
 | **Quality gates** | Offline pytest in CI on every push. A manual workflow runs the sampled evaluation and fails if faithfulness < 0.9 or key-fact accuracy < 0.8. Dockerfile included. |
@@ -73,6 +89,7 @@ every request ─► logs/audit.jsonl (role, question, rewrite, sources, status,
 
 | Component | Choice | Alternatives considered | Why this one |
 |---|---|---|---|
+| Orchestration | **Custom LangGraph RAG agent** (plan ⇄ search loop inside a guarded graph) | fixed retrieve → generate pipeline; `create_react_agent`; fully autonomous agent | A fixed pipeline cannot run separate regulation and policy searches or multi-hop lookups. A prebuilt ReAct agent would also write the final answer, skipping structured output, the grounding grader and the rails. The custom graph gives the model only the search decisions, and keeps generation, verification and access control deterministic. |
 | Framework | **LangChain + LangGraph** | LlamaIndex; plain SDK | LangChain provides every retrieval piece as a tested component: header-aware splitter, BM25, FAISS, RRF ensemble, listwise re-ranker and the Indexing API. LangGraph makes the loop, the guardrails and memory an explicit state graph with a built-in checkpointer. A hand-written first version was about 5x more code. |
 | Chunking | **Header-aware split + 320-token cap + contextual header** | fixed windows; semantic chunking | A CFR paragraph "(l)" or policy section "7." is the natural unit of meaning. The header (citation, topic such as "forklift", section, version/SUPERSEDED) fixes the boundary problem: "(iii) ... every three years" doesn't say it is about forklift operators. Semantic chunking adds cost and non-determinism for no gain on structured text. |
 | Embeddings | **text-embedding-3-small** | 3-large (measured); local bge/e5 (earlier iteration) | 3-large improves dense-only recall. In the full pipeline, the re-ranker closes most of the gap at 6.5x lower embedding cost. |
@@ -124,7 +141,7 @@ On the full 61-question set (earlier run), hybrid + re-rank reached R@5 **0.944 
 
 ## Production notes
 
-- **Scale (1,000 concurrent queries):** the bottleneck is 4–6 LLM calls per request (rewrite, 2 rails, re-rank, generate, grade), 5–8 s total. FAISS and BM25 take milliseconds. Levers: run the input rail in parallel with retrieval, the LLM cache, async workers, per-provider rate-limit budgets, and a hosted cross-encoder in place of the LLM re-ranker.
+- **Scale (1,000 concurrent queries):** the bottleneck is 5–9 LLM calls per request (rewrite, 2 rails, 1–3 planning steps, a re-rank per search, generate, grade), 6–10 s total. FAISS and BM25 take milliseconds. Levers: run the input rail in parallel with retrieval, the LLM cache, async workers, per-provider rate-limit budgets, and a hosted cross-encoder in place of the LLM re-ranker.
 - **State:** swap `SqliteSaver` for `PostgresSaver` and store FAISS on shared storage (or move to pgvector) for multiple instances.
 - **Identity:** the role is chosen in the UI for the demo. In production it must come from SSO claims, never from the client.
 - **Governance:** `needs_review` answers and 👎 feedback form a review queue. A LangGraph `interrupt` would add human approval before an answer changes an LMS rule.
