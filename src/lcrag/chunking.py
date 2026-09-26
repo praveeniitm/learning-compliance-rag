@@ -59,7 +59,7 @@ class ChunkingConfig:
 def _header(doc: Document, trail: list[str]) -> str:
     meta = doc.meta
     status = meta.get("status", "current")
-    parts = [f"[{doc.citation}] {doc.title}"]
+    parts = [f"[{doc.citation}] {doc.title}" + (f" ({meta['topic']})" if meta.get("topic") else "")]
     if doc.doc_type not in ("regulation", "statute"):
         v = f"{doc.doc_type}, version {meta.get('version', '?')}, effective {meta.get('effective_date', '?')}"
         parts.append(v + (f", SUPERSEDED on {meta.get('superseded_on')}" if status == "superseded" else ""))

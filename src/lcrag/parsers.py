@@ -177,6 +177,26 @@ def _table_text(table: etree._Element) -> str:
 # --------------------------------------------------------------------------------------------
 # eCFR XML
 # --------------------------------------------------------------------------------------------
+# Regulations rarely use the names practitioners use: 45 CFR 164.530 never says "HIPAA" and
+# 29 CFR 1910.178 never says "forklift". These labels are added to each chunk's contextual header
+# (document-level context enrichment), so both BM25 and the embeddings can match everyday terms.
+REGULATION_TOPICS: dict[str, str] = {
+    "29-CFR-1910.38": "OSHA emergency action plan standard (evacuation, fire drills)",
+    "29-CFR-1910.95": "OSHA occupational noise / hearing conservation standard",
+    "29-CFR-1910.132": "OSHA personal protective equipment (PPE) general standard",
+    "29-CFR-1910.134": "OSHA respiratory protection standard (respirators, fit testing, N95)",
+    "29-CFR-1910.146": "OSHA permit-required confined spaces standard",
+    "29-CFR-1910.147": "OSHA lockout/tagout (LOTO) standard, control of hazardous energy",
+    "29-CFR-1910.157": "OSHA portable fire extinguishers standard",
+    "29-CFR-1910.178": "OSHA powered industrial trucks (forklift) standard",
+    "29-CFR-1910.1030": "OSHA bloodborne pathogens (BBP) standard",
+    "29-CFR-1910.1200": "OSHA hazard communication (HazCom, GHS, SDS) standard",
+    "45-CFR-164.308": "HIPAA Security Rule, administrative safeguards (federal law)",
+    "45-CFR-164.530": "HIPAA Privacy Rule, administrative requirements (federal law)",
+    "CA-GOV-12950.1": "California law on sexual harassment prevention training",
+}
+
+
 def parse_ecfr(path: Path, entry: dict) -> Document:
     root = etree.fromstring(path.read_bytes())
     head = _clean(root.findtext("HEAD") or entry["citation"])
@@ -230,8 +250,8 @@ def parse_ecfr(path: Path, entry: dict) -> Document:
         doc_type="regulation",
         citation=entry["citation"],
         blocks=blocks,
-        meta={k: entry[k] for k in ("source_url", "as_of", "sha256") if k in entry} | {"status": "current",
-                                                                                       "authority": 1},
+        meta={k: entry[k] for k in ("source_url", "as_of", "sha256") if k in entry} | {
+            "status": "current", "authority": 1, "topic": REGULATION_TOPICS.get(entry["doc_id"], "")},
     )
 
 
@@ -266,8 +286,8 @@ def parse_ca_statute(path: Path, entry: dict) -> Document:
         doc_type="statute",
         citation=entry["citation"],
         blocks=blocks,
-        meta={k: entry[k] for k in ("source_url", "as_of", "sha256") if k in entry} | {"status": "current",
-                                                                                       "authority": 1},
+        meta={k: entry[k] for k in ("source_url", "as_of", "sha256") if k in entry} | {
+            "status": "current", "authority": 1, "topic": REGULATION_TOPICS.get(entry["doc_id"], "")},
     )
 
 
