@@ -54,8 +54,11 @@ def tokenize(text: str) -> list[str]:
     return [i.lower() for i in ids] + [w.rstrip("s") if len(w) > 4 else w for w in words]
 
 
-def allowed(meta: dict, role: str = "compliance", as_of: str | None = None) -> bool:
-    """ACL + point-in-time filter. Compliance sees everything (audit history included)."""
+def allowed(meta: dict, role: str = "compliance", as_of: str | None = None, source: str = "any") -> bool:
+    """ACL + point-in-time + source filter. Compliance sees everything (audit history included).
+    source: any | regulation (regulations and statutes) | internal (organization documents)."""
+    if source != "any" and (meta.get("doc_type") in ("regulation", "statute")) != (source == "regulation"):
+        return False
     acl = meta.get("access", "all")
     if role != "compliance" and acl != "all" and role not in acl.split(","):
         return False
@@ -66,8 +69,8 @@ def allowed(meta: dict, role: str = "compliance", as_of: str | None = None) -> b
 
 
 @lru_cache(maxsize=64)
-def _bm25(vs_id: int, role: str, as_of: str | None, k: int) -> BM25Retriever:
-    docs = [d for d in _VS[vs_id].docstore._dict.values() if allowed(d.metadata, role, as_of)]
+def _bm25(vs_id: int, role: str, as_of: str | None, k: int, source: str = "any") -> BM25Retriever:
+    docs = [d for d in _VS[vs_id].docstore._dict.values() if allowed(d.metadata, role, as_of, source)]
     return BM25Retriever.from_documents(docs, k=k, preprocess_func=tokenize)
 
 
@@ -75,13 +78,13 @@ _VS: dict[int, FAISS] = {}
 
 
 def make_retriever(vs: FAISS, mode: str = "hybrid_rerank", k: int = TOP_K, role: str = "compliance",
-                   as_of: str | None = None, rerank_model: str = CHECK_MODEL):
+                   as_of: str | None = None, rerank_model: str = CHECK_MODEL, source: str = "any"):
     """mode: dense | bm25 | hybrid | hybrid_rerank"""
     _VS[id(vs)] = vs
     n = CANDIDATES if mode not in ("dense", "bm25") else k
     dense = vs.as_retriever(search_kwargs={"k": n, "fetch_k": 50 * n,  # over-fetch so filtering keeps n hits
-                                           "filter": lambda m: allowed(m, role, as_of)})
-    bm25 = _bm25(id(vs), role, as_of, n)
+                                           "filter": lambda m: allowed(m, role, as_of, source)})
+    bm25 = _bm25(id(vs), role, as_of, n, source)
     if mode in ("dense", "bm25"):
         return {"dense": dense, "bm25": bm25}[mode]
     hybrid = EnsembleRetriever(retrievers=[bm25, dense], weights=[0.5, 0.5])  # reciprocal rank fusion
