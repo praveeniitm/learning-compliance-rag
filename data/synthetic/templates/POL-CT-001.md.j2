@@ -1,0 +1,109 @@
+---
+doc_id: POL-CT-001-v{{ p.version }}
+title: Compliance Training Policy
+doc_type: policy
+version: "{{ p.version }}"
+effective_date: {{ p.effective }}
+status: {{ status }}
+{% if status == "superseded" %}superseded_on: {{ p.superseded_on }}
+{% endif %}owner: {{ org.compliance_office }}
+---
+# POL-CT-001 Compliance Training Policy (Version {{ p.version }})
+
+{% if status == "superseded" %}> **SUPERSEDED.** This version was replaced by Version 3.2 effective {{ p.superseded_on }}. Retained for audit history only; do not use for current assignments.
+
+{% endif %}Effective date: {{ p.effective }}. Approved by: {{ policy.current.approved_by if status == "current" else "Marcus Ellery, Chief Compliance Officer" }}.
+
+## 1. Purpose
+
+This policy sets out how {{ org.name }} ("{{ org.short }}") identifies, assigns, tracks and documents training that is required by law, by regulation, or by {{ org.short }}'s own risk decisions. It applies to all training delivered through the {{ org.short }} learning management system (LMS).
+
+## 2. Scope
+
+2.1 This policy applies to all {{ org.employees }} employees across {{ sites | length }} locations, including temporary employees engaged for more than 30 days and contractors who operate {{ org.short }} equipment or access protected health information (PHI).
+
+2.2 Sites in scope: {% for s in sites %}{{ s.name }} ({{ s.code }}, {{ s.state }}){% if not loop.last %}; {% endif %}{% endfor %}.
+
+## 3. Definitions
+
+3.1 **Required training** means a course or evaluation that an employee must complete because of a regulation, a statute, or this policy.
+
+3.2 **Safety-critical training** means required training without which the employee must not perform the related task, for example operating a forklift, entering a permit-required confined space, or performing tasks with occupational exposure to blood.
+
+3.3 **Recertification interval** means the maximum time between two completions of the same requirement. Intervals are measured from the completion date of the previous completion, not from the original assignment date.
+
+3.4 **Grace period** means the number of days after the due date during which an overdue item is escalated but not yet treated as a policy violation.
+
+## 4. Roles and Responsibilities
+
+4.1 The **Compliance Office** owns this policy, interprets regulatory requirements, and resolves conflicts between sources (see Section 5).
+
+4.2 **Environmental Health & Safety (EHS)**, led by {{ org.ehs_lead }}, owns the content and evaluation standards of all safety training and approves external safety training equivalency.
+
+4.3 **Learning Systems**, led by {{ org.lms_owner }}, configures assignment rules, recurrence and escalation in the LMS in accordance with SOP-LMS-014 and SOP-LMS-021.
+
+4.4 **Managers** ensure that their direct reports complete required training on time and do not assign safety-critical tasks to employees whose training is not current.
+
+## 5. Requirement Sources and Precedence
+
+5.1 Where a regulation and this policy both address the same training, the **stricter** requirement applies. This policy never relaxes a legal requirement.
+
+5.2 Order of authority: (1) statute or regulation; (2) this policy; (3) standard operating procedures (SOPs), the course catalog and the role curriculum matrix; (4) guidance, FAQs and communications. Informal communications such as e-mails do not change a requirement.
+
+5.3 Where two sources conflict, or a requirement is unclear, the Learning Systems team must not configure a rule until the Compliance Office has issued a written interpretation.
+
+## 6. Assignment Windows
+
+6.1 **New hires** must complete all required non-safety-critical training within {{ p.new_hire_window_days }} calendar days of their start date.
+
+6.2 **Safety-critical training** must be completed before the employee performs the related task, regardless of the {{ p.new_hire_window_days }}-day window.
+
+6.3 **Role or site changes** that add requirements must be completed within {{ p.role_change_window_days }} calendar days of the effective date of the change, or before the related task if safety-critical.
+
+6.4 **Newly promoted supervisors** must complete supervisor-level harassment prevention training within {{ p.new_hire_window_days }} days of the promotion effective date.
+
+## 7. Recertification Intervals
+
+7.1 The following intervals apply. The "Legal basis" column is informative; the "{{ org.short }} rule" column is what the LMS enforces.
+
+| Topic | Legal basis | {{ org.short }} rule |
+|---|---|---|
+{% for r in requirements %}| {{ r.topic }} | {{ r.legal_basis }} | {% if r.key == "hipaa_privacy" or r.key == "hipaa_security" %}within {{ p.new_hire_window_days }} days of hire and {{ "every 12 months" if p.hipaa_refresher == "annual" else "every 24 months" }}{% elif r.key == "forklift" and not p.forklift_annual_refresher %}{{ r.policy_rule | replace("; annual online refresher module", "") }}{% elif r.key == "harassment" %}{{ p.harassment_scope }}: every 24 months; new hires within {{ p.new_hire_window_days }} days{% else %}{{ r.policy_rule }}{% endif %} |
+{% endfor %}
+
+7.2 **HIPAA refresher.** Workforce members at clinics, and any other employee with access to PHI, complete HIPAA privacy and security training {{ p.hipaa_refresher }}.{% if p.hipaa_refresher == "annual" %} The HIPAA rules require training on joining the workforce and after material changes but do not set a fixed refresher interval; the annual refresher is a {{ org.short }} requirement adopted after the 2025 risk assessment.{% endif %}
+
+7.3 **Harassment prevention scope.** Harassment and abusive conduct prevention training applies to {{ p.harassment_scope }}. Supervisors take the 2-hour supervisor course (HR-HAR-200); all other employees take the 1-hour course (HR-HAR-100).{% if status == "current" %} Applying the California standard to every U.S. employee simplifies administration for employees who transfer between states.{% endif %}
+
+7.4 **Early completion.** An employee may complete a recurring item up to {{ p.early_completion_window_days }} days before its due date. The next due date is then calculated from the new completion date (see 3.3).
+
+## 8. Due Dates, Grace Period and Overdue Training
+
+8.1 Annual, non-safety-critical items have a grace period of {{ p.grace_days_annual }} calendar days after the due date.
+
+8.2 Safety-critical items have **no grace period**. On the due date, the manager must remove the employee from the related task until the training is complete, and the related equipment authorization (for example the forklift badge) is suspended.
+
+8.3 Escalation steps for overdue items are defined in SOP-LMS-021.
+
+## 9. Exemptions and Equivalency
+
+9.1 Training completed with another employer or provider may satisfy a requirement if it covered the same content, was completed within the applicable recertification interval, and is approved under SOP-LMS-030.
+
+9.2 Site-specific elements (for example the emergency action plan, site-specific forklift conditions, or {{ org.short }}'s own HIPAA policies and procedures) can never be satisfied by external training.
+
+## 10. Records
+
+10.1 Training records are retained for {{ p.records_retention_years_default }} years after completion unless a longer period applies.
+
+10.2 Where a regulation specifies retention, the longer period applies. For example, bloodborne pathogens training records must be kept for at least 3 years (29 CFR 1910.1030(h)(2)(ii)), and HIPAA documentation for 6 years (45 CFR 164.530(j)); {{ org.short }} retains HIPAA training records for 6 years.
+
+10.3 Forklift operator certifications must record the operator name, training date, evaluation date and the identity of the trainer or evaluator (29 CFR 1910.178(l)(6)).
+
+## 11. Revision History
+
+| Version | Effective | Summary of changes |
+|---|---|---|
+| 3.0 | 2023-01-01 | Initial consolidated policy. |
+| 3.1 | 2024-07-01 | Added early-completion window; harassment training for CA, NY, IL and CT employees. |
+{% if status == "current" %}| 3.2 | 2026-01-01 | New-hire window reduced from 45 to 30 days; role-change window from 30 to 14 days; grace period from 30 to 15 days; HIPAA refresher changed from every two years to annual; harassment prevention extended to all U.S. employees; annual forklift online refresher added. |
+{% endif %}

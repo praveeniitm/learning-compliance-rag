@@ -1,0 +1,52 @@
+---
+doc_id: SOP-EHS-007
+title: Powered Industrial Truck Operator Training and Certification
+doc_type: sop
+version: "5.1"
+effective_date: 2026-01-01
+status: current
+owner: Environmental Health & Safety
+---
+
+# SOP-EHS-007 Powered Industrial Truck Operator Training and Certification
+
+## 1. Scope
+
+Applies to every employee, temporary worker or contractor who operates a forklift, reach truck, order picker or pallet jack (powered) at any Northwind site. Governing regulation: 29 CFR 1910.178(l).
+
+## 2. Initial Certification
+
+2.1 The operator completes EHS-FL-101 Forklift Operator Fundamentals (classroom and supervised practical training on the truck type they will operate).
+
+2.2 The operator then passes EHS-FL-201 Forklift Practical Evaluation, performed in the actual workplace by a qualified evaluator.
+
+2.3 Only after both are recorded in the LMS does EHS issue a forklift badge, which is the operator's authorization to operate. Trainees may operate only under direct supervision of a qualified trainer and only where it does not endanger others.
+
+## 3. Evaluator Qualification
+
+3.1 Evaluators must hold the EHS "PIT Evaluator" qualification, have at least two years of operating experience on the truck type, and have completed the evaluator workshop within the last 36 months.
+
+3.2 An evaluator may not evaluate an operator they trained in the same week.
+
+## 4. Re-evaluation and Refresher Training
+
+4.1 Every operator receives a practical re-evaluation (EHS-FL-201) at least every 36 months, and completes the online refresher EHS-FL-210 every 12 months (POL-CT-001 v3.2).
+
+4.2 Refresher training and a new evaluation are required, regardless of the 36-month cycle, when:
+  (a) the operator is observed operating in an unsafe manner;
+  (b) the operator is involved in an accident or near-miss;
+  (c) an evaluation shows the operator is not operating safely;
+  (d) the operator is assigned to a different type of truck; or
+  (e) a workplace condition changes in a way that could affect safe operation (for example new racking layout or a new dock).
+
+4.3 After a trigger in 4.2, the supervisor records the event in the EHS incident system; EHS uses the LMS "Retrain" action (SOP-LMS-014 section 4). The badge is suspended until the new evaluation is passed.
+
+## 5. Certification Record
+
+5.1 The LMS certification record includes the operator's name, the training date, the evaluation date and the identity of the trainer and evaluator, as required by 29 CFR 1910.178(l)(6).
+
+5.2 Certificates are printable from the operator's LMS transcript.
+
+## 6. Experienced Hires
+
+6.1 An experienced operator hired from another employer still completes EHS-FL-201 at Northwind before operating. Topics already covered by prior training may be waived in EHS-FL-101 under SOP-LMS-030 if the evaluator confirms competence (29 CFR 1910.178(l)(5)).

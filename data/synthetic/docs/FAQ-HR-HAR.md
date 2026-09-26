@@ -1,0 +1,35 @@
+---
+doc_id: FAQ-HR-HAR
+title: Harassment Prevention Training - Manager FAQ
+doc_type: faq
+version: "2026.1"
+effective_date: 2026-01-15
+status: current
+owner: HR Operations
+---
+
+# FAQ-HR-HAR Harassment Prevention Training: Manager FAQ
+
+**Q1. Who has to take harassment prevention training?**
+Since POL-CT-001 v3.2 (effective 2026-01-01), every U.S. employee, not only employees in California, New York, Illinois and Connecticut. Supervisors take HR-HAR-200 (2 hours); everyone else takes HR-HAR-100 (1 hour).
+
+**Q2. How often?**
+Every 24 months from the last completion.
+
+**Q3. I just promoted someone to supervisor. What do they need?**
+HR-HAR-200 within 30 days of the promotion effective date, even if they completed HR-HAR-100 recently. California law allows six months after assuming a supervisory position, but Northwind's rule is stricter.
+
+**Q4. Can my team take the training in pieces?**
+Yes. Both courses save progress and can be completed in shorter segments, as long as the total seat time (60 or 120 minutes) is recorded.
+
+**Q5. A new hire says they completed harassment training at their last job. Do they have to repeat it?**
+They can submit the certificate for equivalency under SOP-LMS-030 section 4. If it is approved, their next assignment is due two years from the prior completion date.
+
+**Q6. Does the training cover abusive conduct and gender identity?**
+Yes. Both courses include prevention of abusive conduct and harassment based on gender identity, gender expression and sexual orientation, as California requires.
+
+**Q7. What happens if someone is overdue?**
+Harassment prevention is not safety-critical, so the 15-day grace period and the standard escalation in SOP-LMS-021 apply.
+
+**Q8. What about seasonal or temporary workers in California?**
+California requires training for seasonal and temporary employees, and for any employee hired to work for less than six months, within 30 calendar days of hire or within 100 hours worked, whichever comes first. Northwind assigns HR-HAR-100 to them on day 1 with a 30-day due date.

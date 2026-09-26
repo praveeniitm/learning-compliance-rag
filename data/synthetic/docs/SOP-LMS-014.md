@@ -1,0 +1,53 @@
+---
+doc_id: SOP-LMS-014
+title: Automated Training Assignment Rules
+doc_type: sop
+version: "4.0"
+effective_date: 2026-01-01
+status: current
+owner: Learning Systems
+---
+
+# SOP-LMS-014 Automated Training Assignment Rules
+
+## 1. Purpose
+
+This procedure describes how the LMS creates, updates and removes required-training assignments from HRIS events, so that assignments match POL-CT-001 v3.2 and the role-to-curriculum matrix (MAT-ROLE-2026).
+
+## 2. HRIS Events and Resulting Assignments
+
+| HRIS event | LMS action | Due date |
+|---|---|---|
+| New hire | Assign full curriculum for job code and site | Start date + 30 days; safety-critical items due on start date and flagged "complete before task" |
+| Job code change | Assign courses in the new curriculum that the employee has not completed within their recertification interval | Effective date + 14 days |
+| Site transfer | Assign the site emergency action plan (EHS-EAP-100) for the new site and any site-level additions | Effective date + 14 days |
+| Promotion to supervisor (supervisor flag set) | Assign HR-HAR-200 | Promotion date + 30 days |
+| Respirator issued (EHS flag) | Assign EHS-RSP-110 | Before first use |
+| Confined space roster added (CS-roster flag) | Assign EHS-CS-300 | Before first entry |
+| Termination | Cancel open assignments; keep records per POL-CT-001 section 10 | n/a |
+
+## 3. Recurrence
+
+3.1 Recurring items are re-assigned automatically when completed. The next due date is the completion date plus the recertification interval in CAT-2026.
+
+3.2 The re-assignment is created 60 days before the next due date so that learners can complete early (POL-CT-001 7.4).
+
+3.3 When a retired course is replaced, existing completions of the retired course keep their original next-due date; the next assignment uses the replacement course.
+
+## 4. Event-Driven Retraining
+
+4.1 EHS may trigger retraining manually with the "Retrain" action, which creates an assignment due in 7 days (or "complete before task" for safety-critical items). Typical triggers are forklift incidents or near-misses (SOP-EHS-007), deviations found during lockout/tagout periodic inspections, and changes to a site's emergency action plan.
+
+4.2 When a site emergency action plan changes, the EHS site lead uploads the new plan and Learning Systems re-assigns EHS-EAP-100 to all employees of that site with a due date 30 days out.
+
+## 5. Dynamic Groups
+
+5.1 The group "PHI-access" includes every employee whose job code is in the clinic family (CLN-*) or who has the "PHI-access" flag from the identity management system. HIPAA courses are assigned by this group.
+
+5.2 Known gap (2026-Q2 audit, finding F-3): the CLN-TEL job code was added to HRIS without being added to the curriculum matrix; the dynamic group rule was corrected on 2026-07-10.
+
+## 6. Change Control
+
+6.1 Every change to an assignment rule is recorded in the LMS change log with the approving Compliance Office interpretation number.
+
+6.2 Rules are tested in the LMS sandbox against a copy of the HRIS extract before promotion to production.
