@@ -31,6 +31,34 @@ GLOSSARY: dict[str, str] = {
 _COMPILED = [(re.compile(p, re.I), exp) for p, exp in GLOSSARY.items()]
 
 
+TOPIC_PATTERNS: dict[str, str] = {
+    "bloodborne pathogens": r"bloodborne|\bbbp\b|needlestick|sharps",
+    "HIPAA": r"hipaa|privacy|\bphi\b|security awareness|protected health",
+    "harassment prevention": r"harass|abusive conduct",
+    "forklift": r"forklift|fork lift|powered industrial|pallet jack|reach truck|\bpit\b",
+    "respiratory protection": r"respirat|fit[- ]?test|\bn95\b",
+    "lockout/tagout": r"lockout|tagout|\bloto\b|hazardous energy",
+    "hazard communication": r"hazcom|hazard communication|\bsds\b|\bghs\b|chemical",
+    "fire extinguishers": r"extinguisher",
+    "hearing conservation": r"hearing|noise",
+    "confined spaces": r"confined space",
+    "emergency action plan": r"emergency action|evacuation|\beap\b",
+    "code of conduct": r"code of conduct|ethics",
+}
+_TRAINING_Q = re.compile(r"\b(training|refresher|recert\w*|retrain\w*|course|how often|interval)\b", re.I)
+_SPECIFIC = re.compile(r"\b[A-Z]{2,4}(-[A-Z0-9]+)+\b|\d{2,5}\.\d+|\bpolicy\b|\bgrace\b|\bescalat|\boverdue\b|"
+                       r"\bnew hire|\bsupervisor|\baudit|\bequivalen|\bexempt|\brecord", re.I)
+
+
+def detect_topics(query: str) -> list[str]:
+    return [t for t, p in TOPIC_PATTERNS.items() if re.search(p, query, re.I)]
+
+
+def is_underspecified(query: str) -> bool:
+    """Rule-based check: asks about a training requirement but names no topic, course or rule."""
+    return bool(_TRAINING_Q.search(query)) and not detect_topics(query) and not _SPECIFIC.search(query)
+
+
 def expand(query: str) -> str:
     extra = [exp for rx, exp in _COMPILED if rx.search(query) and exp.lower() not in query.lower()]
     return query if not extra else f"{query} ({'; '.join(dict.fromkeys(extra))})"
