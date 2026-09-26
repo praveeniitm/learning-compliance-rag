@@ -29,7 +29,7 @@ if os.getenv("LLM_CACHE", "1") == "1":
     set_llm_cache(SQLiteCache(str(ROOT / ".cache" / "llm.sqlite")))
 
 LLM_MODEL = os.getenv("LLM_MODEL", "gpt-4.1-nano")
-# Checking tasks (re-ranking, grounding grader, guardrail classifiers) need a stronger model than
+# Decision and checking tasks (search planning, re-ranking, grader, guardrails) need a stronger model than
 # generation: with nano, re-rank recall fell 0.906 -> 0.844 and the grader flagged ~80% of faithful
 # answers as unsupported. Generation stays on nano.
 CHECK_MODEL = os.getenv("CHECK_MODEL", "gpt-4.1-mini")
