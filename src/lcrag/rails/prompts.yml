@@ -12,8 +12,10 @@ prompts:
       - it asks for legal advice on a specific lawsuit or for help evading a regulation or an audit
       - it is abusive or harmful
 
-      Allow questions about requirements, intervals, courses, policies, audits, escalation and history,
-      even if brief, informal or follow-ups ("what about supervisors?").
+      Always allow (do NOT block) questions about requirements, intervals, courses, policies, SOPs,
+      internal audit findings and their root causes, completion rates, escalation, exemptions and
+      policy history, even if brief, informal or follow-ups. Examples to allow: "what about supervisors?",
+      "Which audit findings were raised in Q2 2026?", "Why was completion low at the Fresno clinic?"
 
       User message: "{{ user_input }}"
 
