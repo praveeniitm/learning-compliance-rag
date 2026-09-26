@@ -69,6 +69,8 @@ def main() -> None:
         # Jinja's trim_blocks can swallow the blank line before a heading; restore it so the
         # Markdown stays valid and the structure-aware chunker sees clean section breaks.
         text = re.sub(r"(?<=[^\n])\n(#{1,6} )", r"\n\n\1", text)
+        # Same for numbered clauses ("7.3 ...") that follow a Jinja block tag on the previous line.
+        text = re.sub(r"(?<=[^\n|])\n(\d+\.\d+ )", r"\n\n\1", text)
         (OUT / name).write_text(text, encoding="utf-8")
         print(f"rendered {name:40s} {len(text):>7,d} chars")
     print(f"{len(rendered)} documents -> {OUT}")

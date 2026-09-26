@@ -84,7 +84,9 @@ This policy sets out how Northwind Manufacturing & Health ("Northwind") identifi
 | Code of conduct | none (internal requirement) | all employees at hire and every 12 months |
 
 7.2 **HIPAA refresher.** Workforce members at clinics, and any other employee with access to PHI, complete HIPAA privacy and security training every two years.
+
 7.3 **Harassment prevention scope.** Harassment and abusive conduct prevention training applies to employees located in California, New York, Illinois and Connecticut. Supervisors take the 2-hour supervisor course (HR-HAR-200); all other employees take the 1-hour course (HR-HAR-100).
+
 7.4 **Early completion.** An employee may complete a recurring item up to 60 days before its due date. The next due date is then calculated from the new completion date (see 3.3).
 
 ## 8. Due Dates, Grace Period and Overdue Training
