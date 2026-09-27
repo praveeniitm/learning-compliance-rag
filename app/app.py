@@ -17,7 +17,7 @@ from pydantic import BaseModel
 
 from lcrag.assistant import Assistant
 from lcrag.config import DATA_DIR
-from lcrag.store import ROLES
+from lcrag.retrieval import ROLES
 
 A = Assistant()
 SAMPLE_DOC = DATA_DIR / "samples" / "RN-LMS-2026-09.md"

@@ -11,7 +11,7 @@ from langgraph.checkpoint.sqlite import SqliteSaver
 
 from .config import LOG_DIR, ROOT
 from .graph import MAX_DOCS, build_graph
-from .store import sync_index
+from .indexing import sync_index
 
 PRICES = {"gpt-4.1-nano": (0.10, 0.40), "gpt-4.1-mini": (0.40, 1.60), "gpt-4.1": (2.00, 8.00)}  # USD / 1M tokens
 

@@ -9,7 +9,7 @@ os.environ["LLM_CACHE"] = "0"
 sys.path.insert(0, str(Path(__file__).parents[1] / "eval"))
 
 from lcrag.corpus import load_documents, split_documents  # noqa: E402
-from lcrag.store import allowed, tokenize  # noqa: E402
+from lcrag.retrieval import allowed, tokenize  # noqa: E402
 
 DOCS = load_documents()
 CHUNKS = split_documents(DOCS)

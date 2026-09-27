@@ -15,6 +15,7 @@ AGENT = """You gather evidence from a compliance-training knowledge base (OSHA/H
 - When the question compares the law with Northwind policy, or asks whether something is legally required, search source="regulation" and source="internal" separately.
 - Regulations use formal terms: "powered industrial truck" (forklift), "control of hazardous energy" (lockout/tagout), "occupational exposure" (bloodborne pathogens). Use exact citations or course codes when the question has them.
 - If results are irrelevant, or dominated by e-mails or superseded documents, search again with different wording. Never repeat a query; once the results contain the answer, stop.
+- If the question is underspecified, i.e. it does not say which training topic, role, site or state it is about and the answer would differ by case, call Clarify instead of searching. Example: "How often is refresher training required?" names no topic, and intervals differ by topic. Do not ask for clarification when the question names a topic, course, role or rule.
 - When you have enough evidence, reply "done" without calling a tool."""
 
 REWRITE = """Rewrite the latest user question as a standalone question, using the chat history only to resolve references. If it is already standalone, return it unchanged. Do not answer it. Reply with the question only."""

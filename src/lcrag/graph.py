@@ -2,13 +2,14 @@
 
   START -> contextualize -> guard_input --blocked--> finalize -> END
                                  \\-> plan <-> search            (agent loop, at most MAX_SEARCHES)
+                                        \\-> clarify -> finalize (underspecified question)
                                         \\-> generate -> grade --unsupported, 1st try--> generate
                                                            \\-> guard_output -> finalize -> END
 
 contextualize  rewrite a follow-up into a standalone question (memory = SQLite checkpointer per thread)
 guard_input    NeMo input rails: PII regex, jailbreak / off-topic / evasion
-plan           tool-calling agent chooses what to search and where (regulations vs internal documents);
-               the first turn must search, so every answer is grounded
+plan           tool-calling agent chooses what to search and where (regulations vs internal documents),
+               or asks the user to clarify an underspecified question; its first turn must call a tool
 search         hybrid retrieval with the caller's role and as-of date (the agent cannot change them)
 generate       structured answer with [S#] citations and a status
 grade          lists unsupported statements -> one revision, else status "unverified" (needs review)
@@ -26,7 +27,7 @@ from pydantic import BaseModel, Field
 from . import prompts
 from .config import CHECK_MODEL, chat_model
 from .guardrails import check_input, check_output
-from .store import make_retriever
+from .retrieval import make_retriever
 
 MAX_SEARCHES, MAX_DOCS = 3, 10  # bound the cost of the agent loop and the prompt size
 
@@ -37,6 +38,13 @@ class Search(BaseModel):
     query: str = Field(description="Focused search query")
     source: Literal["any", "regulation", "internal"] = Field(
         "any", description="regulation = laws and regulations only; internal = Northwind documents only")
+
+
+class Clarify(BaseModel):
+    """Ask the user one short question when the answer depends on information they did not give."""
+
+    question: str = Field(description="The clarifying question")
+    examples: list[str] = Field(description="At most 3 example cases the user might mean")
 
 
 class RAGAnswer(BaseModel):
@@ -100,13 +108,15 @@ def build_graph(vs, checkpointer=None):
 
     def plan(s: State) -> State:
         when = f" (as of {s['as_of']})" if s.get("as_of") else ""
-        llm = planner.bind_tools([Search], tool_choice="required" if not s["scratch"] else "auto")
+        llm = planner.bind_tools([Search, Clarify], tool_choice="required" if not s["scratch"] else "auto")
         ai = llm.invoke([("system", prompts.AGENT), ("human", f"Question: {s['standalone']}{when}"), *s["scratch"]])
         return {"scratch": s["scratch"] + [ai]}
 
     def search(s: State) -> State:
         docs, searches, replies = list(s["docs"]), list(s["searches"]), []
         for call in s["scratch"][-1].tool_calls:
+            if call["name"] != "Search":
+                continue
             args = Search(**call["args"])
             if args.model_dump() in searches:
                 replies.append(ToolMessage("Already searched. Use different wording or reply done.",
@@ -123,8 +133,16 @@ def build_graph(vs, checkpointer=None):
         return {"docs": docs, "searches": searches, "scratch": s["scratch"] + replies}
 
     def after_plan(s: State) -> str:
-        wants_more = bool(s["scratch"][-1].tool_calls)
-        return "search" if wants_more and len(s["searches"]) < MAX_SEARCHES else "generate"
+        calls = s["scratch"][-1].tool_calls
+        if any(c["name"] == "Clarify" for c in calls):
+            return "clarify"
+        return "search" if calls and len(s["searches"]) < MAX_SEARCHES else "generate"
+
+    def clarify(s: State) -> State:
+        c = Clarify(**next(c["args"] for c in s["scratch"][-1].tool_calls if c["name"] == "Clarify"))
+        cases = "; ".join(c.examples[:3])
+        return {"status": "needs_clarification", "clarifying_question": c.question,
+                "answer": f"The answer depends on the case{f' (for example: {cases})' if cases else ''}."}
 
     def generate(s: State) -> State:
         when = f"\nAs-of date: {s['as_of']}" if s.get("as_of") else ""
@@ -152,13 +170,14 @@ def build_graph(vs, checkpointer=None):
         return {"messages": [HumanMessage(s["question"]), AIMessage(s["answer"])]}
 
     g = StateGraph(State)
-    for fn in (contextualize, guard_input, plan, search, generate, grade, guard_output, finalize):
+    for fn in (contextualize, guard_input, plan, search, clarify, generate, grade, guard_output, finalize):
         g.add_node(fn.__name__, fn)
     g.add_edge(START, "contextualize")
     g.add_edge("contextualize", "guard_input")
     g.add_conditional_edges("guard_input", lambda s: "finalize" if s["blocked_by"] else "plan", ["finalize", "plan"])
-    g.add_conditional_edges("plan", after_plan, ["search", "generate"])
+    g.add_conditional_edges("plan", after_plan, ["search", "clarify", "generate"])
     g.add_edge("search", "plan")
+    g.add_edge("clarify", "finalize")
     g.add_edge("generate", "grade")
     g.add_conditional_edges("grade", lambda s: "generate" if s["unsupported"] and s["attempts"] < 2 else "guard_output",
                             ["generate", "guard_output"])
