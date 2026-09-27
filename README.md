@@ -6,7 +6,7 @@ A question-answering assistant for **compliance training**. It answers questions
 - **Domain:** enterprise documents in learning and compliance: regulations, policies, standard operating procedures (SOPs), course catalogs, audit reports and e-mails.
 - **Built with:** LangGraph and LangChain (orchestration), FAISS (Facebook AI Similarity Search, a vector-search library) and BM25 (Best Matching 25, a keyword-ranking formula) for search, NeMo Guardrails (safety checks), OpenAI models (any OpenAI-compatible server such as Ollama or vLLM also works), FastAPI and Gradio (application programming interface (API) and chat user interface (UI)).
 
-A two-page technical write-up is in [writeup/writeup.pdf](writeup/writeup.pdf).
+A two-page technical write-up is in [writeup/writeup.pdf](writeup/writeup.pdf). Video walkthrough (5 minutes): _link to be added_.
 
 ## 1. Problem
 
@@ -74,7 +74,7 @@ flowchart LR
 | New policy version replaces an old one | The old version stays searchable for history questions. Its chunks are labelled SUPERSEDED, and it is excluded when a question asks about a date after it was replaced. | – |
 | Regulation amended | Re-run `python data/fetch_regulations.py --date <new date>`, then the indexer. Only amended paragraphs are re-embedded. | – |
 
-No full re-embedding is ever needed. Each run re-reads and re-hashes the corpus, which takes about a second; only changed text costs embedding calls.
+No full re-embedding is ever needed. Each run re-reads and re-hashes the corpus, which takes about a second; only changed text is sent for embedding.
 
 ### 3.2 Answering a question
 
@@ -87,6 +87,7 @@ flowchart TD
     P -->|search| S["4. Search<br/>(filtered by role and date)"]
     S --> P
     P -->|question is vague| C["Ask a clarifying question"]
+    P -->|greeting or thanks| T["Fixed friendly reply<br/>(no search)"]
     P -->|enough evidence| W["5. Write answer<br/>with citations"]
     W --> V{"6. Check: is every<br/>statement supported?"}
     V -->|no, first time| W
@@ -100,7 +101,12 @@ The flow is a LangGraph graph ([`src/lcrag/graph.py`](src/lcrag/graph.py)):
 2. **Input guardrails** (NeMo Guardrails):
    - A pattern check blocks personal data, such as social security or card numbers, without calling any model.
    - A small model then blocks attempts to override the assistant's instructions, off-topic requests, questions about a named person's records, and requests to evade a rule ("how can we backdate certificates?").
-3. **Plan.** An LLM agent decides what to search for. It has two tools: `Search(query, source)`, where `source` can be regulations only, internal documents only, or both, and `Clarify(question)`. Its first step must call one of them, so it can never answer without looking something up.
+3. **Plan.** An LLM agent decides what to search for. It has three tools:
+   - `Search(query, source)`, where `source` can be regulations only, internal documents only, or both.
+   - `Clarify(question)`, for vague questions.
+   - `SmallTalk(kind)`, for messages that need no documents, such as "hi", "thanks" or "what can you do?".
+
+   Its first step must call one of these tools, so it can never write a factual answer without looking something up. `SmallTalk` returns one of four fixed, pre-written replies (greeting, thanks, goodbye, what I can do). The model cannot put its own text into that reply, so this path cannot produce an unverified factual claim, and there is nothing to check against sources. A greeting combined with a real question ("hello, how often are forklift operators re-evaluated?") still goes through search.
 4. **Search.** The search tool runs a hybrid search, described in 3.3. The user's role and the as-of date are taken from the request and applied inside the search function. The agent only chooses the query text and the source, so it cannot widen what the user is allowed to see. If the agent sends a query identical to an earlier one, the tool returns "Already searched" instead of running it. The loop stops after 3 searches.
 5. **Write the answer.** A separate model call writes the answer from the collected passages, at most 10 of them. The answer uses a fixed output format: the text with `[S1]`-style citations, a status (answered, needs clarification, not in the documents, out of scope) and an optional clarifying question.
 6. **Check grounding.** A checker model compares the answer with the passages and lists any statement they do not support. If there is one, the writer gets one chance to fix it. If the second attempt still fails, the answer is shown with an "unverified" warning and flagged for human review.
@@ -160,13 +166,19 @@ The write-up explains each decision in more detail. This table summarizes the ma
 | Component | Chosen | Rejected alternative, and why |
 |---|---|---|
 | Chunking | Split at headings (one regulation paragraph group or one policy section), max 320 tokens with 32 overlap, plus a context header | **Fixed 320-token windows:** 0.043 lower Recall@5 and 0.156 lower MRR. They cut through tables and paragraph lists. |
-| Embeddings | `text-embedding-3-small` | **`text-embedding-3-large`:** better when used alone (Recall@5 0.859 vs. 0.791). The small model with re-ranking reaches 0.940, above the large model alone, at 6.5× lower embedding cost. |
+| Embeddings | `text-embedding-3-small` | **`text-embedding-3-large`:** better when used alone (Recall@5 0.859 vs. 0.791). The small model with re-ranking reaches 0.940, above the large model alone, with a smaller and cheaper embedding model. |
 | Retrieval | BM25 + dense search, fused with RRF, then an LLM re-ranker | **Dense only:** misses exact citations and codes. **Weighted score fusion:** needs score calibration between BM25 and dense scores. |
 | Orchestration | A custom LangGraph agent that only plans the searches | **A fixed single-search pipeline:** cannot look up law and policy separately. **LangGraph's prebuilt ReAct (reason-and-act) agent:** would also write the final answer, skipping the fixed output format and the grounding check. |
-| Hallucination control | Grounding check with one revision, plus an "unverified" flag | **A small natural-language-inference (NLI) model as the checker:** tried earlier; it misjudged paraphrases such as "forklift" vs. "powered industrial truck". |
+| Hallucination control | Grounding check with one revision, plus an "unverified" flag | **Prompt instructions only ("use only the sources"):** there would be no way to detect a hallucination after it happens. **Checker on the cheapest model (nano):** it rejected most correct answers. |
 | Vector store | FAISS, exact search | **A database-backed store (Chroma, pgvector):** unnecessary at 965 chunks, where exact search takes under a millisecond. pgvector becomes worthwhile with several writers or database-enforced permissions. |
 | Guardrails | NeMo Guardrails, used for checks only | **Instructions in the prompt alone:** not reliable against prompt injection. **Llama Guard:** needs a separately hosted safety model. |
-| Models | `gpt-4.1-nano` writes answers; `gpt-4.1-mini` plans, re-ranks, checks and runs the guardrails | **Nano for everything:** planning and checking became unreliable. For example, nano as the checker rejected most correct answers. |
+| Models | OpenAI: `gpt-4.1-nano` writes answers; `gpt-4.1-mini` plans, re-ranks, checks and runs the guardrails; `text-embedding-3-small` for embeddings | **Nano for everything:** planning and checking became unreliable. For example, nano as the checker rejected most correct answers. |
+
+**Hosted vs. self-hosted models.**
+- *Now:* both the LLM and the embeddings are OpenAI's hosted models, which keeps setup simple.
+- *When to switch:* if documents must not leave the organization (data residency), or request volume makes per-call API pricing expensive, self-hosted open-weight models are the natural next step. Examples are Llama or Qwen for the LLM and bge or e5 for embeddings, served with vLLM or Ollama.
+- *Code changes:* none. Point `LLM_BASE_URL` and `EMBED_BASE_URL` at the server and re-run the indexer; the embeddings must be rebuilt once because a different embedding model produces different vectors.
+- *Trade-off:* smaller open models need re-checking with the evaluation suite, especially for the planning and grading steps.
 
 ## 5. Results
 
@@ -174,18 +186,22 @@ The evaluation set has 74 questions written from the documents. They cover 10 ty
 
 **Retrieval: one search, top 5 passages** (39 test questions that have known answer passages)
 
-| Configuration | Precision@5 | Recall@5 | MRR | Recall@5 change vs. dense [95% CI] |
-|---|---|---|---|---|
-| Dense (FAISS) only | 0.292 | 0.791 | 0.751 | – |
-| BM25 only | 0.236 | 0.688 | 0.692 | −0.103 [−0.252, +0.051] |
-| Hybrid: BM25 + dense with RRF | 0.287 | 0.799 | 0.796 | +0.009 [−0.073, +0.103] |
-| **Hybrid + LLM re-rank (used)** | **0.344** | **0.940** | **0.987** | **+0.150 [+0.047, +0.256]** |
+| Configuration | Precision@5 | Recall@5 | MRR |
+|---|---|---|---|
+| Dense (FAISS) only | 0.292 | 0.791 | 0.751 |
+| BM25 only | 0.236 | 0.688 | 0.692 |
+| Hybrid: BM25 + dense with RRF | 0.287 | 0.799 | 0.796 |
+| **Hybrid + LLM re-rank (used)** | **0.344** | **0.940** | **0.987** |
+
+What the comparison shows:
+- *Fusion alone, compared with dense only.* It barely changes Recall@5 (0.791 → 0.799) but moves the first correct passage higher: MRR rises from 0.751 to 0.796.
+- *Why recall barely moves.* BM25 and dense search each find answer passages the other misses. BM25 finds exact citations and course codes; dense search finds paraphrased wording. Fusion keeps only 5 of their combined 40 candidates, so on some questions it gains a passage BM25 contributed, and on others it drops one that dense search alone had ranked in its top 5. Across the test set, these gains and losses roughly offset each other.
+- *Re-ranking over fusion.* The re-ranker reads the query together with each of the 20 fused candidates and picks the best 5, so it keeps the useful contributions of both searches. That raises Recall@5 to 0.940 (+0.149 over dense only) and MRR to 0.987.
 
 How to read the metrics:
 - *Recall@5* is the share of the known answer passages found in the top 5.
 - *Precision@5* is the share of the top 5 that are answer passages. Most questions have only 1–3 answer passages, so it cannot go much above 0.4–0.6.
 - *MRR* (mean reciprocal rank) is 1 when the first result is relevant, 0.5 when the second is, and so on.
-- The interval is a paired bootstrap over questions.
 
 **Full assistant** (47 test questions)
 
@@ -193,14 +209,21 @@ How to read the metrics:
 |---|---|
 | Correct outcome (answer / ask to clarify / decline) | 0.936 |
 | Key facts correct in answers | 0.974 |
-| Faithfulness: share of answer statements supported by the retrieved passages (judged by `gpt-4.1-mini`) | 0.982 |
-| Faithfulness of answers that passed the grounding check | 0.994 |
+| Faithfulness, all answers: share of statements supported by the retrieved passages (judged by `gpt-4.1-mini`) | 0.982 |
+| Faithfulness, excluding answers shown to the user as "unverified" | 0.994 |
 | Answer passages found by the agent's searches (up to 10 passages) | 0.932 |
 | Average searches per question | 1.7 |
-| Latency / cost per question | 8.1 s / $0.007 |
+| Latency per question | 8.1 s |
 
-**Safety checks: 21 of 21 passed** ([results/safety.md](results/safety.md)):
-- Guardrails: 6 attacks blocked, 3 legitimate questions allowed.
+The two faithfulness numbers differ by the answers the grounding check could not verify:
+- *All answers* includes the 4% of answers that are shown with an "unverified" warning.
+- *Excluding unverified* covers only the answers a user sees without a warning.
+
+The gap shows the grounding check catching real errors.
+
+**Safety checks: 26 of 26 passed** ([results/safety.md](results/safety.md)):
+- Guardrails: 6 attacks blocked, 5 legitimate messages allowed (including "Hi there!").
+- Small talk: greetings, thanks and "what can you help me with?" get a fixed reply without any search (3 of 3).
 - Access control: restricted documents never reached unauthorized roles, and authorized roles received them.
 - As-of dates: 2 of 2.
 - Follow-up questions using memory: 3 of 3.
@@ -209,6 +232,7 @@ How to read the metrics:
 **Examples**, with searches, retrieved passages, answer and faithfulness annotation: [results/examples.md](results/examples.md). Two show how unclear or off-topic questions are handled:
 - *Vague:* "How often is refresher training required?" The assistant asks: "For which training topic or role do you want to know the refresher training interval?" It does not guess.
 - *Off-topic:* "How do I reset my VPN password?" The input guardrail stops it before any search: "I can't help with that request. I answer questions about compliance-training requirements…"
+- *No documents needed:* "Hi there!" gets a fixed greeting that explains what the assistant can do, with no search and nothing to verify.
 
 ## 6. Where it fails
 
@@ -218,6 +242,7 @@ How to read the metrics:
 - **Guardrail false positives** (2 cases):
   - A question the documents cannot answer ("training budget for Reno") was refused by the input guardrail as off-topic. The user still gets a refusal, but for the wrong reason.
   - One correct answer about a forklift incident was blocked by the output guardrail.
+- **Small talk is deliberately narrow.** It has four fixed replies: greeting, thanks, goodbye and what the assistant can do. Other conversational messages, such as "how are you?", are either handled as one of these or refused by the input guardrail. That trade-off keeps the no-search path free of generated claims.
 - **Conflicting and versioned questions** remain the hardest for retrieval. An informal e-mail or the old policy often matches the question's wording best. The rule that current policy outranks e-mails is enforced in the writing step, not in the search.
 - **Evaluation limits:**
   - 74 questions give wide confidence intervals.
@@ -242,7 +267,7 @@ How to read the metrics:
 - Scanned PDF documents would need an optical character recognition (OCR) step.
 
 **Already in place:**
-- Every question is logged to `logs/audit.jsonl` with role, searches, sources, status, tokens and cost.
+- Every question is logged to `logs/audit.jsonl` with role, searches, sources, status and token usage.
 - User feedback goes to `logs/feedback.jsonl`.
 - Full tracing in LangSmith needs only an environment variable (`LANGSMITH_TRACING=true`).
 
@@ -257,7 +282,7 @@ src/lcrag/      config.py      settings and model setup
                 graph.py       the LangGraph agent
                 prompts.py     all prompts
                 guardrails.py  NeMo Guardrails checks (rails/ holds their configuration)
-                assistant.py   memory, audit log, cost tracking
+                assistant.py   memory, audit log, token usage
 app/app.py      REST API (FastAPI) and chat UI (Gradio)
 eval/           qa.yaml (questions), splits.yaml (dev/test), safety.yaml, evaluate.py
 results/        retrieval.md, e2e.md, examples.md, safety.md, freshness.md
@@ -274,7 +299,7 @@ uv venv --python 3.11 .venv && source .venv/bin/activate
 uv pip install -r requirements.txt -e .
 cp .env.example .env                        # add OPENAI_API_KEY
 
-python -m lcrag.indexing                    # build the index (about 1,000 chunks, a few cents)
+python -m lcrag.indexing                    # build the index (about 1,000 chunks)
 pytest -q tests                             # offline unit tests
 
 python eval/evaluate.py retrieval           # -> results/retrieval.md
@@ -284,8 +309,6 @@ python eval/evaluate.py freshness           # -> results/freshness.md
 
 python app/app.py                           # chat UI at http://127.0.0.1:7860, API docs at /docs
 ```
-
-A full evaluation run costs about $1 in API usage.
 
 - **Re-fetching the regulations:** they are committed, but `python data/fetch_regulations.py` downloads them again.
 - **Local models:** set `LLM_BASE_URL` and `EMBED_BASE_URL` in `.env` to an Ollama or vLLM server.
