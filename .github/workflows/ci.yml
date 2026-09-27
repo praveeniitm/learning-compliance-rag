@@ -2,7 +2,7 @@ name: ci
 on:
   push:
   pull_request:
-  workflow_dispatch:  # manual run also executes the (paid, sampled) evaluation
+  workflow_dispatch:  # a manual run also executes the (paid) evaluation
 
 jobs:
   test:
@@ -24,14 +24,17 @@ jobs:
       - uses: astral-sh/setup-uv@v5
       - run: uv venv --python 3.11 && uv pip install -r requirements.txt -e .
       - run: .venv/bin/python eval/evaluate.py safety
-      - run: .venv/bin/python eval/evaluate.py e2e --n 20
-      - name: Quality gate
+      - run: .venv/bin/python eval/evaluate.py e2e
+      - name: Quality gate (test split)
         run: |
           .venv/bin/python - <<'EOF'
           import json, sys
-          s = json.load(open("results/e2e.json"))["summary"]["test"]
-          gate = {"faithfulness (judge, share of supported statements)": 0.9, "key-fact accuracy (answerable)": 0.8}
-          bad = {k: s[k] for k, t in gate.items() if (s[k] or 0) < t}
+          rows = [r for r in json.load(open("results/e2e.json")) if r["split"] == "test"]
+          def mean(k):
+              xs = [r[k] for r in rows if r.get(k) is not None]
+              return sum(xs) / len(xs)
+          gate = {"faithfulness_verified": 0.95, "key_facts_ok": 0.85, "status_ok": 0.85}
+          bad = {k: round(mean(k), 3) for k, t in gate.items() if mean(k) < t}
           sys.exit(f"quality gate failed: {bad}" if bad else 0)
           EOF
       - uses: actions/upload-artifact@v4
