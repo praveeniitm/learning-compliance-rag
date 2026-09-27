@@ -5,13 +5,12 @@
 | Status accuracy (answer / clarify / decline) | 0.889 | 0.936 |
 | Key-fact accuracy (answerable questions) | 0.909 | 0.974 |
 | Faithfulness, all answers (share of statements supported by sources) | 0.95 | 0.982 |
-| Faithfulness, answers that passed the grounding check | 1.0 | 0.994 |
+| Faithfulness, excluding answers shown as 'unverified' | 1.0 | 0.994 |
 | Answers flagged 'unverified' to the user | 0.037 | 0.043 |
 | Evidence recall (gold passages found by the agent's searches) | 0.97 | 0.932 |
 | Searches per question | 1.889 | 1.702 |
 | Answers revised after the grounding check | 0.111 | 0.043 |
 | Latency per question (s) | 8.46 | 8.05 |
-| Cost per question (USD) | 0.008 | 0.007 |
 
 74 questions (27 dev / 47 test). Generator gpt-4.1-nano; planner, re-ranker, grader and guardrails gpt-4.1-mini; judge gpt-4.1-mini. Declined = insufficient context, out of scope or blocked; these count as one outcome for status accuracy.
 
