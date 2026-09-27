@@ -24,8 +24,8 @@
 #   insufficient   in-domain, but the corpus does not contain the answer
 #   out_of_scope   not about compliance training
 #
-# Authoring note: questions were written from facts.yaml and the regulation text *before* running
-# any experiment on them. The dev/test split is assigned by eval/split.py (seeded, stratified by type).
+# Authoring note: questions were written from the Northwind documents and the regulation text *before* running
+# any experiment on them. The dev/test split is fixed in eval/splits.yaml (seeded, stratified by type, 27 dev / 47 test).
 
 - id: q01
   type: reg_fact
@@ -45,7 +45,7 @@
   type: law_vs_policy
   question: Is the annual HIPAA refresher a legal requirement or a Northwind rule?
   gold: [[POL-CT-001-v3.2, "7.2"], [45-CFR-164.530, "(b)"]]
-  key_facts: ['northwind|policy|internal', 'no fixed|not set|does not (set|specify|require)|not (legally )?required|no (specific|set) (refresher )?interval']
+  key_facts: ['northwind|policy|internal', 'no fixed|not set|does not (set|specify|require)|not (legally |explicitly )?(required|mandated)|no (specific|set) (refresher )?interval']
   expect: answered
 
 - id: q04

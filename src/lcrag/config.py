@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(ROOT / ".env")
 
 DATA_DIR = ROOT / "data"
-CORPUS_DIRS = [DATA_DIR / "regulations", DATA_DIR / "synthetic" / "docs", DATA_DIR / "incoming"]
+CORPUS_DIRS = [DATA_DIR / "regulations", DATA_DIR / "northwind", DATA_DIR / "incoming"]
 INDEX_DIR, EVAL_DIR, RESULTS_DIR, LOG_DIR = ROOT / "indexes", ROOT / "eval", ROOT / "results", ROOT / "logs"
 
 LLM_MODEL = os.getenv("LLM_MODEL", "gpt-4.1-nano")  # writes answers
