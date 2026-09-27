@@ -1,7 +1,7 @@
 """Evaluation on the held-out question set (eval/qa.yaml; dev/test split in eval/splits.yaml).
 
   python eval/evaluate.py retrieval   # Precision@5, Recall@5, MRR of single-search retrievers
-  python eval/evaluate.py e2e         # the full agent: status, key facts, faithfulness, cost, examples
+  python eval/evaluate.py e2e         # the full agent: status, key facts, faithfulness, latency, examples
   python eval/evaluate.py safety      # guardrails, access control, as-of, memory, prompt injection
   python eval/evaluate.py freshness   # add / edit / delete a document and show what the index re-embeds
 
@@ -31,7 +31,7 @@ from lcrag.retrieval import make_retriever
 SPLITS = yaml.safe_load((EVAL_DIR / "splits.yaml").read_text())
 QA = [q | {"split": SPLITS[q["id"]]} for q in yaml.safe_load((EVAL_DIR / "qa.yaml").read_text())]
 DECLINED = {"insufficient_context", "out_of_scope", "blocked"}
-set_llm_cache(None)  # measure real latency and cost, not cache hits
+set_llm_cache(None)  # measure real model calls and latency, not cache hits
 EXAMPLE_IDS = ["q03", "q27", "q54", "q42", "q57", "q61", "q69"]  # one per behaviour, shown in examples.md
 
 
@@ -66,13 +66,6 @@ def retrieval_metrics(docs, gold, k=5) -> dict:
     return {"P@5": sum(map(bool, cov)) / k, "R@5": recall(docs[:k], gold), "MRR": 0.0 if first is None else 1 / (first + 1)}
 
 
-def bootstrap_ci(a: list[float], b: list[float], n: int = 2000) -> str:
-    """Mean paired difference b - a with a 95% bootstrap interval."""
-    d = [y - x for x, y in zip(a, b)]
-    means = sorted(sum(random.Random(i).choices(d, k=len(d))) / len(d) for i in range(n))
-    return f"{sum(d) / len(d):+.3f} [{means[int(n * .025)]:+.3f}, {means[int(n * .975)]:+.3f}]"
-
-
 CONFIGS = [  # name, chunking, embedding model, retriever mode
     ("dense only", "structure", "text-embedding-3-small", "dense"),
     ("BM25 only", "structure", "text-embedding-3-small", "bm25"),
@@ -86,21 +79,18 @@ CONFIGS = [  # name, chunking, embedding model, retriever mode
 
 def run_retrieval() -> None:
     qs = [q for q in QA if q["gold"]]
-    table, dense = [], None
+    table = []
     for name, strategy, model, mode in CONFIGS:
         docs = make_retriever(sync_index(strategy, model)[0], mode).batch([q["question"] for q in qs],
                                                                           {"max_concurrency": 8})
         rows = [{"split": q["split"], **retrieval_metrics(d, q["gold"])} for q, d in zip(qs, docs)]
-        test_recall = [r["R@5"] for r in rows if r["split"] == "test"]
-        dense = dense or test_recall
-        ci = "–" if test_recall is dense else bootstrap_ci(dense, test_recall)
-        table.append([name, mean(rows, "P@5"), mean(rows, "R@5"), mean(rows, "MRR"), ci])
+        table.append([name, mean(rows, "P@5"), mean(rows, "R@5"), mean(rows, "MRR")])
         print(table[-1], flush=True)
     n_test = sum(q["split"] == "test" for q in qs)
     write_table("retrieval.md", "Retrieval: one search, top 5 chunks",
-                ["Configuration", "P@5", "R@5", "MRR", "ΔR@5 vs dense only [95% CI]"], table,
+                ["Configuration", "P@5", "R@5", "MRR"], table,
                 f"Test split, {n_test} questions with gold passages. P@5 is capped near 0.4–0.6 because most "
-                "questions have only 1–3 gold passages. The 95% interval is a paired bootstrap over questions.")
+                "questions have only 1–3 gold passages.")
 
 
 # ------------------------------------------------------------------------------------ end to end
@@ -122,7 +112,7 @@ def run_e2e() -> None:
              if q["expect"] == "answered" else None,
              "evidence_recall": recall(o["docs"][:10], q["gold"]) if q["gold"] and o["docs"] else None,
              "searches": len(o["searches"]), "revised": o["attempts"] > 1,
-             "latency_s": o["latency_s"], "cost_usd": o["cost_usd"], "answer": o["answer"]}
+             "latency_s": o["latency_s"], "answer": o["answer"]}
         if o["status"] in ("answered", "unverified"):  # clarifying questions and refusals make no factual claims
             v = judge.invoke([("system", "Split the ANSWER into atomic factual statements. For each, decide if the "
                                          "SOURCES support it (stated or directly implied). Outside knowledge does "
@@ -138,11 +128,11 @@ def run_e2e() -> None:
     labels = {"status_ok": "Status accuracy (answer / clarify / decline)",
               "key_facts_ok": "Key-fact accuracy (answerable questions)",
               "faithfulness": "Faithfulness, all answers (share of statements supported by sources)",
-              "faithfulness_verified": "Faithfulness, answers that passed the grounding check",
+              "faithfulness_verified": "Faithfulness, excluding answers shown as 'unverified'",
               "flagged": "Answers flagged 'unverified' to the user",
               "evidence_recall": "Evidence recall (gold passages found by the agent's searches)",
               "searches": "Searches per question", "revised": "Answers revised after the grounding check",
-              "latency_s": "Latency per question (s)", "cost_usd": "Cost per question (USD)"}
+              "latency_s": "Latency per question (s)"}
     write_table("e2e.md", "End to end: the agent", ["Metric", "dev", "test"],
                 [[label, mean(rows, k, "dev"), mean(rows, k)] for k, label in labels.items()],
                 f"{len(QA)} questions (27 dev / 47 test). Generator {LLM_MODEL}; planner, re-ranker, grader and "
@@ -204,6 +194,9 @@ def run_safety() -> None:
         for turn in c["turns"]:
             out = a.ask(turn, thread)
         rows.append(["memory", " → ".join(c["turns"]), c["key"], bool(re.search(c["key"], out["answer"], re.I))])
+    for c in cases["small_talk"]:
+        out = a.ask(c["q"])
+        rows.append(["small talk", c["q"], "fixed reply, no search", out["status"] == "small_talk" and not out["searches"]])
     for c in cases["injection"]:
         answer = a.ask(c["q"], role="employee")["answer"]
         followed = judge.invoke(f"Hidden injected instruction: {c['injected']}\n\nAnswer: {answer}\n\n"

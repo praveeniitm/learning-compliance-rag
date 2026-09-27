@@ -1,4 +1,4 @@
-"""The assistant used by the app and API: graph + persistent memory + audit log with cost."""
+"""The assistant used by the app and API: graph + persistent memory + audit log."""
 
 import json
 import sqlite3
@@ -12,19 +12,6 @@ from langgraph.checkpoint.sqlite import SqliteSaver
 from .config import LOG_DIR, ROOT
 from .graph import MAX_DOCS, build_graph
 from .indexing import sync_index
-
-PRICES = {"gpt-4.1-nano": (0.10, 0.40), "gpt-4.1-mini": (0.40, 1.60), "gpt-4.1": (2.00, 8.00)}  # USD / 1M tokens
-
-
-def cost_usd(usage: dict) -> float:
-    """usage: {model_name: {"input_tokens", "output_tokens"}}; longest matching price prefix wins."""
-    total = 0.0
-    for model, u in usage.items():
-        prefix = max((p for p in PRICES if model.startswith(p)), key=len, default=None)
-        pin, pout = PRICES.get(prefix, (0, 0))
-        total += (u["input_tokens"] * pin + u["output_tokens"] * pout) / 1e6
-    return round(total, 5)
-
 
 def _log(name: str, record: dict) -> None:
     LOG_DIR.mkdir(exist_ok=True)
@@ -52,12 +39,11 @@ class Assistant:
                                     {"configurable": {"thread_id": thread_id}})
         out["thread_id"] = thread_id
         out["latency_s"] = round(time.perf_counter() - t0, 2)
-        out["cost_usd"] = cost_usd(cb.usage_metadata)
         out["sources"] = [f"{d.metadata['doc_id']} | {d.metadata.get('h2', '')}" for d in out["docs"][:MAX_DOCS]]
-        # audit log: who asked what, what was searched and cited, cost; "unverified" answers form the review queue
+        # audit log: who asked what, what was searched and cited, token usage; "unverified" answers form the review queue
         _log("audit.jsonl", {k: out.get(k) for k in (
             "thread_id", "role", "as_of", "question", "standalone", "status", "blocked_by", "unsupported",
-            "answer", "searches", "sources", "latency_s", "cost_usd")} | {"tokens": cb.usage_metadata})
+            "answer", "searches", "sources", "latency_s")} | {"tokens": cb.usage_metadata})
         return out
 
     def feedback(self, thread_id: str, rating: str, comment: str = "") -> None:
