@@ -3,6 +3,7 @@
   START -> contextualize -> guard_input --blocked--> finalize -> END
                                  \\-> plan <-> search            (agent loop, at most MAX_SEARCHES)
                                         \\-> clarify -> finalize (underspecified question)
+                                        \\-> small_talk -> finalize (greeting, thanks: fixed reply, no search)
                                         \\-> generate -> grade --unsupported, 1st try--> generate
                                                            \\-> guard_output -> finalize -> END
 
@@ -47,6 +48,12 @@ class Clarify(BaseModel):
     examples: list[str] = Field(description="At most 3 example cases the user might mean")
 
 
+class SmallTalk(BaseModel):
+    """Reply to a greeting, thanks, goodbye or a question about what the assistant can do. No search."""
+
+    kind: Literal["greeting", "thanks", "goodbye", "capabilities"]
+
+
 class RAGAnswer(BaseModel):
     answer: str = Field(description="Answer with inline [S#] citations")  # answer before status: better status choice
     status: Literal["answered", "needs_clarification", "insufficient_context", "out_of_scope"] = Field(
@@ -71,7 +78,7 @@ class State(TypedDict, total=False):
     docs: list[Document]  # evidence accumulated across searches
     answer: str
     clarifying_question: str | None
-    status: str  # RAGAnswer.status, or "unverified" / "blocked"
+    status: str  # RAGAnswer.status, or "unverified" / "blocked" / "small_talk"
     unsupported: list[str]
     attempts: int
     blocked_by: str | None
@@ -108,7 +115,7 @@ def build_graph(vs, checkpointer=None):
 
     def plan(s: State) -> State:
         when = f" (as of {s['as_of']})" if s.get("as_of") else ""
-        llm = planner.bind_tools([Search, Clarify], tool_choice="required" if not s["scratch"] else "auto")
+        llm = planner.bind_tools([Search, Clarify, SmallTalk], tool_choice="required" if not s["scratch"] else "auto")
         ai = llm.invoke([("system", prompts.AGENT), ("human", f"Question: {s['standalone']}{when}"), *s["scratch"]])
         return {"scratch": s["scratch"] + [ai]}
 
@@ -136,6 +143,8 @@ def build_graph(vs, checkpointer=None):
         calls = s["scratch"][-1].tool_calls
         if any(c["name"] == "Clarify" for c in calls):
             return "clarify"
+        if any(c["name"] == "SmallTalk" for c in calls) and not s["searches"]:
+            return "small_talk"
         return "search" if calls and len(s["searches"]) < MAX_SEARCHES else "generate"
 
     def clarify(s: State) -> State:
@@ -143,6 +152,10 @@ def build_graph(vs, checkpointer=None):
         cases = "; ".join(c.examples[:3])
         return {"status": "needs_clarification", "clarifying_question": c.question,
                 "answer": f"The answer depends on the case{f' (for example: {cases})' if cases else ''}."}
+
+    def small_talk(s: State) -> State:
+        kind = next(c["args"]["kind"] for c in s["scratch"][-1].tool_calls if c["name"] == "SmallTalk")
+        return {"status": "small_talk", "answer": prompts.SMALL_TALK.get(kind, prompts.SMALL_TALK["greeting"])}
 
     def generate(s: State) -> State:
         when = f"\nAs-of date: {s['as_of']}" if s.get("as_of") else ""
@@ -170,14 +183,15 @@ def build_graph(vs, checkpointer=None):
         return {"messages": [HumanMessage(s["question"]), AIMessage(s["answer"])]}
 
     g = StateGraph(State)
-    for fn in (contextualize, guard_input, plan, search, clarify, generate, grade, guard_output, finalize):
+    for fn in (contextualize, guard_input, plan, search, clarify, small_talk, generate, grade, guard_output, finalize):
         g.add_node(fn.__name__, fn)
     g.add_edge(START, "contextualize")
     g.add_edge("contextualize", "guard_input")
     g.add_conditional_edges("guard_input", lambda s: "finalize" if s["blocked_by"] else "plan", ["finalize", "plan"])
-    g.add_conditional_edges("plan", after_plan, ["search", "clarify", "generate"])
+    g.add_conditional_edges("plan", after_plan, ["search", "clarify", "small_talk", "generate"])
     g.add_edge("search", "plan")
     g.add_edge("clarify", "finalize")
+    g.add_edge("small_talk", "finalize")
     g.add_edge("generate", "grade")
     g.add_conditional_edges("grade", lambda s: "generate" if s["unsupported"] and s["attempts"] < 2 else "guard_output",
                             ["generate", "guard_output"])

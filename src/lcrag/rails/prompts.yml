@@ -12,6 +12,7 @@ prompts:
       - it asks for legal advice on a specific lawsuit or for help evading a regulation or an audit
       - it is abusive or harmful
 
+      Always allow greetings, thanks, goodbyes and questions about what the assistant can do.
       Always allow (do NOT block) questions about requirements, intervals, courses, policies, SOPs,
       internal audit findings and their root causes, completion rates, escalation, exemptions and
       policy history, even if brief, informal or follow-ups. Examples to allow: "what about supervisors?",

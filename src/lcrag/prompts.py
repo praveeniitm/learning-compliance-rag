@@ -16,7 +16,21 @@ AGENT = """You gather evidence from a compliance-training knowledge base (OSHA/H
 - Regulations use formal terms: "powered industrial truck" (forklift), "control of hazardous energy" (lockout/tagout), "occupational exposure" (bloodborne pathogens). Use exact citations or course codes when the question has them.
 - If results are irrelevant, or dominated by e-mails or superseded documents, search again with different wording. Never repeat a query; once the results contain the answer, stop.
 - If the question is underspecified, i.e. it does not say which training topic, role, site or state it is about and the answer would differ by case, call Clarify instead of searching. Example: "How often is refresher training required?" names no topic, and intervals differ by topic. Do not ask for clarification when the question names a topic, course, role or rule.
+- If the message is only a greeting, thanks, goodbye, or a question about what you can do, call SmallTalk. Never use SmallTalk for a question about training, policy, courses or regulations.
 - When you have enough evidence, reply "done" without calling a tool."""
+
+# Fixed replies for messages that need no documents. The text is fixed (not generated), so this path
+# cannot produce an ungrounded factual claim.
+SMALL_TALK = {
+    "greeting": "Hello! I answer questions about compliance-training requirements: which training a role needs, "
+                "how often, which course covers it, and what the law requires versus Northwind policy. "
+                "For example: \"How often must forklift operators be re-evaluated?\"",
+    "thanks": "You're welcome. Ask me another training question any time.",
+    "goodbye": "Goodbye!",
+    "capabilities": "I search OSHA and HIPAA regulations, California's harassment-training law and Northwind's "
+                    "policies, procedures, course catalog and audit reports, and answer with citations to the "
+                    "exact paragraph. I tell you when the documents don't contain an answer.",
+}
 
 REWRITE = """Rewrite the latest user question as a standalone question, using the chat history only to resolve references. If it is already standalone, return it unchanged. Do not answer it. Reply with the question only."""
 
