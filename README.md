@@ -6,7 +6,6 @@ A question-answering assistant for **compliance training**. It answers questions
 - **Domain:** enterprise documents in learning and compliance: regulations, policies, standard operating procedures (SOPs), course catalogs, audit reports and e-mails.
 - **Built with:** LangGraph and LangChain (orchestration), FAISS (Facebook AI Similarity Search, a vector-search library) and BM25 (Best Matching 25, a keyword-ranking formula) for search, NeMo Guardrails (safety checks), OpenAI models (any OpenAI-compatible server such as Ollama or vLLM also works), FastAPI and Gradio (application programming interface (API) and chat user interface (UI)).
 
-A two-page technical write-up is in [writeup/writeup.pdf](writeup/writeup.pdf). Video walkthrough (5 minutes): _link to be added_.
 
 ## 1. Problem
 
